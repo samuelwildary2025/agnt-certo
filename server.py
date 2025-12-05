@@ -30,6 +30,10 @@ from tools.redis_tools import (
     pop_all_messages,
     set_agent_cooldown,
     is_agent_in_cooldown,
+    get_order_session,
+    start_order_session,
+    refresh_session_ttl,
+    get_order_context,
 )
 
 logger = setup_logger(__name__)
@@ -411,7 +415,20 @@ def buffer_loop(tel):
         
         msgs = pop_all_messages(n)
         final = " ".join([m for m in msgs if m.strip()])
-        if final: process_async(n, final)
+        if final:
+            # Atualizar/criar sessão de pedido
+            session = get_order_session(n)
+            if session is None:
+                start_order_session(n)
+            else:
+                refresh_session_ttl(n)
+            
+            # Injetar contexto de sessão na mensagem
+            order_ctx = get_order_context(n)
+            if order_ctx:
+                final = f"{order_ctx}\n\n{final}"
+            
+            process_async(n, final)
     except: pass
     finally: buffer_sessions.pop(re.sub(r"\D","",tel), None)
 

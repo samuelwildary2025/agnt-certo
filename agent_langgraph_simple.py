@@ -55,7 +55,22 @@ def pedidos_tool(json_body: str) -> str:
     
     Use esta ferramenta SOMENTE quando o cliente confirmar o pedido.
     """
-    return pedidos(json_body)
+    import json as json_lib
+    from tools.redis_tools import mark_order_sent
+    
+    result = pedidos(json_body)
+    
+    # Se pedido foi enviado com sucesso, marcar no Redis
+    if "sucesso" in result.lower() or "✅" in result:
+        try:
+            data = json_lib.loads(json_body)
+            telefone = data.get("telefone", "")
+            if telefone:
+                mark_order_sent(telefone)
+        except:
+            pass
+    
+    return result
 
 @tool
 def alterar_tool(telefone: str, json_body: str) -> str:

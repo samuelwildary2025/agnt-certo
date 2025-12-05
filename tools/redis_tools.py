@@ -174,3 +174,186 @@ def is_agent_in_cooldown(telefone: str) -> Tuple[bool, int]:
     except redis.exceptions.RedisError as e:
         logger.error(f"Erro ao consultar cooldown: {e}")
         return (False, -1)
+
+
+# ============================================
+# Gerenciamento de Sessão de Pedidos
+# ============================================
+
+import json
+from datetime import datetime
+
+# Constantes de tempo (em segundos)
+SESSION_TTL = 40 * 60  # 40 minutos para montar pedido
+MODIFICATION_TTL = 15 * 60  # 15 minutos para alterar após envio
+
+
+def order_session_key(telefone: str) -> str:
+    """Chave da sessão de pedido no Redis."""
+    return f"order_session:{telefone}"
+
+
+def get_order_session(telefone: str) -> Optional[Dict]:
+    """
+    Retorna a sessão de pedido atual do cliente.
+    
+    Returns:
+        Dict com campos:
+        - status: 'building' (montando) ou 'sent' (enviado)
+        - started_at: timestamp de início
+        - sent_at: timestamp de envio (se enviado)
+        - order_id: ID do pedido (se enviado)
+    """
+    client = get_redis_client()
+    if client is None:
+        return None
+    
+    try:
+        key = order_session_key(telefone)
+        data = client.get(key)
+        if data:
+            return json.loads(data)
+        return None
+    except Exception as e:
+        logger.error(f"Erro ao obter sessão de pedido: {e}")
+        return None
+
+
+def start_order_session(telefone: str) -> bool:
+    """
+    Inicia uma nova sessão de pedido (status: building).
+    TTL de 40 minutos.
+    """
+    client = get_redis_client()
+    if client is None:
+        return False
+    
+    try:
+        key = order_session_key(telefone)
+        session = {
+            "status": "building",
+            "started_at": datetime.now().isoformat(),
+            "sent_at": None,
+            "order_id": None
+        }
+        client.set(key, json.dumps(session), ex=SESSION_TTL)
+        logger.info(f"📦 Nova sessão de pedido iniciada para {telefone} (TTL: {SESSION_TTL//60}min)")
+        return True
+    except Exception as e:
+        logger.error(f"Erro ao iniciar sessão de pedido: {e}")
+        return False
+
+
+def mark_order_sent(telefone: str, order_id: str = None) -> bool:
+    """
+    Marca o pedido como enviado. 
+    Atualiza TTL para 15 minutos (janela de alteração).
+    """
+    client = get_redis_client()
+    if client is None:
+        return False
+    
+    try:
+        key = order_session_key(telefone)
+        session = get_order_session(telefone)
+        
+        if session is None:
+            session = {"started_at": datetime.now().isoformat()}
+        
+        session["status"] = "sent"
+        session["sent_at"] = datetime.now().isoformat()
+        session["order_id"] = order_id
+        
+        client.set(key, json.dumps(session), ex=MODIFICATION_TTL)
+        logger.info(f"✅ Pedido marcado como enviado para {telefone} (TTL modificação: {MODIFICATION_TTL//60}min)")
+        return True
+    except Exception as e:
+        logger.error(f"Erro ao marcar pedido como enviado: {e}")
+        return False
+
+
+def clear_order_session(telefone: str) -> bool:
+    """Remove a sessão de pedido."""
+    client = get_redis_client()
+    if client is None:
+        return False
+    
+    try:
+        client.delete(order_session_key(telefone))
+        logger.info(f"🗑️ Sessão de pedido removida para {telefone}")
+        return True
+    except Exception as e:
+        logger.error(f"Erro ao limpar sessão de pedido: {e}")
+        return False
+
+
+def get_order_context(telefone: str) -> str:
+    """
+    Retorna o contexto de pedido para injetar no agente.
+    
+    Returns:
+        String com instrução para o agente baseada no estado da sessão.
+    """
+    session = get_order_session(telefone)
+    
+    if session is None:
+        # Sem sessão ativa - iniciar nova
+        start_order_session(telefone)
+        return "[SESSÃO] Nova sessão de pedido iniciada. Monte o pedido normalmente."
+    
+    status = session.get("status", "building")
+    
+    if status == "building":
+        # Ainda montando pedido
+        return "[SESSÃO] Pedido em andamento. Continue montando."
+    
+    elif status == "sent":
+        # Pedido já foi enviado - está na janela de modificação
+        return "[SESSÃO] Pedido já enviado. Se cliente quiser adicionar algo, use alterar_tool."
+    
+    return ""
+
+
+def check_can_modify_order(telefone: str) -> Tuple[bool, str]:
+    """
+    Verifica se o cliente pode modificar o pedido.
+    
+    Returns:
+        (pode_modificar, mensagem_explicativa)
+    """
+    session = get_order_session(telefone)
+    
+    if session is None:
+        return (False, "Nenhum pedido ativo. Será criado um novo.")
+    
+    status = session.get("status", "building")
+    
+    if status == "building":
+        return (True, "Pedido ainda em montagem.")
+    
+    elif status == "sent":
+        # Está na janela de 15min (Redis ainda tem a chave)
+        return (True, "Pedido enviado recentemente. Pode alterar com alterar_tool.")
+    
+    return (False, "Sessão expirada. Novo pedido será criado.")
+
+
+def refresh_session_ttl(telefone: str) -> bool:
+    """
+    Renova o TTL da sessão quando o cliente interage (se ainda em building).
+    """
+    client = get_redis_client()
+    if client is None:
+        return False
+    
+    try:
+        session = get_order_session(telefone)
+        if session and session.get("status") == "building":
+            key = order_session_key(telefone)
+            client.expire(key, SESSION_TTL)
+            logger.debug(f"TTL da sessão renovado para {telefone}")
+            return True
+        return False
+    except Exception as e:
+        logger.error(f"Erro ao renovar TTL da sessão: {e}")
+        return False
