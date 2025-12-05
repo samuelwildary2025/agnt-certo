@@ -294,12 +294,37 @@ def get_order_context(telefone: str) -> str:
     Returns:
         String com instrução para o agente baseada no estado da sessão.
     """
+    client = get_redis_client()
     session = get_order_session(telefone)
     
+    # Chave para rastrear se cliente já teve pedido recente
+    history_key = f"order_history:{telefone}"
+    
     if session is None:
-        # Sem sessão ativa - iniciar nova
+        # Verificar se tinha sessão anterior (expirou)
+        had_previous = False
+        if client:
+            try:
+                had_previous = client.get(history_key) is not None
+            except:
+                pass
+        
+        # Iniciar nova sessão
         start_order_session(telefone)
-        return "[SESSÃO] Nova sessão de pedido iniciada. Monte o pedido normalmente."
+        
+        # Marcar que cliente tem histórico (TTL de 2 horas)
+        if client:
+            try:
+                client.set(history_key, "1", ex=7200)  # 2 horas
+            except:
+                pass
+        
+        if had_previous:
+            # Sessão expirou - avisar o agente
+            return "[SESSÃO] Sessão anterior expirou (40min). Novo pedido iniciado. Avise o cliente que o pedido anterior não foi finalizado e pergunte se quer começar um novo."
+        else:
+            # Conversa nova
+            return "[SESSÃO] Nova conversa. Monte o pedido normalmente."
     
     status = session.get("status", "building")
     
