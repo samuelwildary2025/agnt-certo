@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     # Postgres
     postgres_connection_string: str
     postgres_table_name: str = "memoria"
-    postgres_message_limit: int = 12
+    postgres_message_limit: int = 8
     
     # Redis
     redis_host: str = "localhost"
