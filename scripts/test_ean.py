@@ -138,6 +138,7 @@ def main():
         if isinstance(preview, str) and len(preview) > 2000:
             preview = preview[:2000] + "\n... (truncado)"
         print("\nRetorno bruto:\n")
+        print(f"\n[INFO] Tamanho da resposta bruta: {len(txt)} caracteres")
         print(preview)
     except requests.exceptions.RequestException as e:
         print(f"Erro ao consultar smart-responder: {e}")

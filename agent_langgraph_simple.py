@@ -10,6 +10,7 @@ from langchain_core.messages import BaseMessage, SystemMessage, HumanMessage, AI
 from langchain_core.tools import tool
 from langchain_core.runnables import RunnableConfig
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_community.callbacks import get_openai_callback
 from langgraph.graph import StateGraph, END
 from langgraph.prebuilt import ToolNode, tools_condition, create_react_agent
 from langgraph.checkpoint.memory import MemorySaver
@@ -182,7 +183,14 @@ def run_agent_langgraph(telefone: str, mensagem: str) -> Dict[str, Any]:
         config = {"configurable": {"thread_id": telefone}}
         
         logger.info("Executando agente...")
-        result = agent.invoke(initial_state, config)
+        
+        # Contador de tokens
+        with get_openai_callback() as cb:
+            result = agent.invoke(initial_state, config)
+            
+            # Log de tokens
+            logger.info(f"📊 TOKENS - Prompt: {cb.prompt_tokens} | Completion: {cb.completion_tokens} | Total: {cb.total_tokens}")
+            logger.info(f"💰 CUSTO ESTIMADO: ${cb.total_cost:.6f} USD")
         
         # 4. Extrair resposta
         output = "Desculpe, não entendi."

@@ -66,7 +66,7 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     log_file: str = "logs/agente.log"
     
-    agent_prompt_path: str | None = None
+    agent_prompt_path: str | None = "prompts/agent_system_optimized.md"
 
 
 # Instância global de configurações

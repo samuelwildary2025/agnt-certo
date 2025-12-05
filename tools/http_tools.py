@@ -306,16 +306,19 @@ def ean_lookup(query: str) -> str:
             # Ordena por score desc
             ordered = [pn for pn, sc in sorted(scored, key=lambda x: x[1], reverse=True)]
             # Mantém apenas os com score >= 1.0 (pelo menos um token da consulta)
-            top_relevant = [pn for pn, sc in sorted(scored, key=lambda x: x[1], reverse=True) if sc >= 1.0][:10]
+            top_relevant = [pn for pn, sc in sorted(scored, key=lambda x: x[1], reverse=True) if sc >= 1.0][:3]
             # Fallback: se não houver relevantes, use os primeiros pares retornados
-            used_pairs = top_relevant if top_relevant else ordered[:10]
+            used_pairs = top_relevant if top_relevant else ordered[:3]
             summary = _format_summary(used_pairs)
             if summary:
                 sanitized = summary.replace("\n", "; ")
                 logger.info(f"smart-responder resumo extraído: {sanitized}")
-                return f"{summary}\n\n{json.dumps(data, indent=2, ensure_ascii=False)}"
+                final_resp = f"{summary}\n\n{json.dumps(data, indent=2, ensure_ascii=False)}"
             else:
-                return json.dumps(data, indent=2, ensure_ascii=False)
+                final_resp = json.dumps(data, indent=2, ensure_ascii=False)
+
+            logger.info(f"Tamanho da resposta ean_lookup: {len(final_resp)} caracteres")
+            return final_resp
         except Exception:
             # Se não for JSON, tentar extrair com regex do texto bruto
             pairs = _extract_pairs_from_text(text)
@@ -341,8 +344,8 @@ def ean_lookup(query: str) -> str:
                         score += 1.5
                 return score
             scored = [(pn, _score(query, pn[1])) for pn in pairs]
-            top_relevant = [pn for pn, sc in sorted(scored, key=lambda x: x[1], reverse=True) if sc >= 1.0][:10]
-            used_pairs = top_relevant if top_relevant else [pn for pn, _ in scored][:10]
+            top_relevant = [pn for pn, sc in sorted(scored, key=lambda x: x[1], reverse=True) if sc >= 1.0][:3]
+            used_pairs = top_relevant if top_relevant else [pn for pn, _ in scored][:3]
             summary = _format_summary(used_pairs)
             if summary:
                 return f"{summary}\n\n{text}"
