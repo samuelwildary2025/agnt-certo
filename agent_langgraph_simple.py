@@ -188,9 +188,15 @@ def run_agent_langgraph(telefone: str, mensagem: str) -> Dict[str, Any]:
         with get_openai_callback() as cb:
             result = agent.invoke(initial_state, config)
             
+            # Cálculo manual de custo (gpt-4o-mini pricing)
+            # Input: $0.15 per 1M tokens | Output: $0.60 per 1M tokens
+            input_cost = (cb.prompt_tokens / 1_000_000) * 0.15
+            output_cost = (cb.completion_tokens / 1_000_000) * 0.60
+            total_cost = input_cost + output_cost
+            
             # Log de tokens
             logger.info(f"📊 TOKENS - Prompt: {cb.prompt_tokens} | Completion: {cb.completion_tokens} | Total: {cb.total_tokens}")
-            logger.info(f"💰 CUSTO ESTIMADO: ${cb.total_cost:.6f} USD")
+            logger.info(f"💰 CUSTO: ${total_cost:.6f} USD (Input: ${input_cost:.6f} | Output: ${output_cost:.6f})")
         
         # 4. Extrair resposta
         output = "Desculpe, não entendi."
