@@ -416,15 +416,10 @@ def buffer_loop(tel):
         msgs = pop_all_messages(n)
         final = " ".join([m for m in msgs if m.strip()])
         if final:
-            # Atualizar/criar sessão de pedido
-            session = get_order_session(n)
-            if session is None:
-                start_order_session(n)
-            else:
-                refresh_session_ttl(n)
-            
-            # Injetar contexto de sessão na mensagem
+            # PRIMEIRO: Obter contexto de sessão (detecta se expirou)
             order_ctx = get_order_context(n)
+            
+            # Injetar contexto na mensagem
             if order_ctx:
                 final = f"{order_ctx}\n\n{final}"
             

@@ -329,7 +329,8 @@ def get_order_context(telefone: str) -> str:
     status = session.get("status", "building")
     
     if status == "building":
-        # Ainda montando pedido
+        # Ainda montando pedido - renovar TTL
+        refresh_session_ttl(telefone)
         return "[SESSÃO] Pedido em andamento. Continue montando."
     
     elif status == "sent":
