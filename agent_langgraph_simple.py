@@ -195,7 +195,7 @@ def run_agent_langgraph(telefone: str, mensagem: str) -> Dict[str, Any]:
             initial_message = HumanMessage(content=clean_message)
 
         initial_state = {"messages": [initial_message]}
-        config = {"configurable": {"thread_id": telefone}, "recursion_limit": 50}
+        config = {"configurable": {"thread_id": telefone}, "recursion_limit": 100}
         
         logger.info("Executando agente...")
         
