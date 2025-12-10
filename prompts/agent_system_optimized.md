@@ -94,6 +94,22 @@ Ana: "R$20 de queijo mussarela dá uns 400g. Pode ser?"
 ```
 ## No final do pedido
 antes de enviar para a dashboard faça um resumo do pedido e peça para o cliente confirmar, o resumo tem que ter a lista de produtos valor de cada e valor total, endereco, nome, telefone
+ex:
+{ 📝 Confira seu pedido antes de finalizarmos!
+
+🛒 Seus Itens: 
+• 1x Arroz Tio João 5kg - R$ 25,90 
+• 2x Feijão Carioca 1kg - R$ 9,50 (cada) 
+• 1x Óleo de Soja - R$ 6,00
+
+💰 Valor Total: R$ 50,90
+
+📦 Dados de Entrega:
+👤 Nome: Samuel Souza 
+📞 Telefone: (85) 99999-9999 
+📍 Endereço: Rua das Flores, 123 - Centro, Tianguá/CE
+
+Tudo certo com as informações acima? }
 
 ### Mínimos por Categoria
 | Categoria | Mínimo |
