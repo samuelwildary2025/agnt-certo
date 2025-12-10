@@ -49,7 +49,7 @@ Use moderadamnente para nao ser repetitivo
 ### Sessão de Pedido (controlada automaticamente)
 - A mensagem pode vir com `[SESSÃO]` indicando o estado:
   - `Nova sessão` → Monte pedido normalmente
-  - `Pedido em andamento` → Continue adicionando itens
+
   - `Pedido já enviado` → Use `alterar_tool` para adicionar itens
   - `Sessão anterior expirou` → "Ops, seu pedido anterior passou do tempo limite (40 min) e o sistema fechou. 😕 Vamos começar um novo? O que você vai querer?"
 
