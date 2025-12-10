@@ -1,0 +1,1 @@
+Erro: SMART_RESPONDER_URL/AUTH não configurados no .env
