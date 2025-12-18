@@ -57,11 +57,9 @@ Cliente manda tudo junto? **VOCÊ identifica e separa automaticamente. NUNCA pe�
 ### Frete por Bairro
 **SEMPRE informe o valor do frete ao finalizar o pedido!**
 
-| Frete | Bairros |
-
-| R$ 3,00 | Grilo, Novo Pabussu, Cabatan, Vila Gois
-| R$ 5,00 | Centro, Itapuan, Urubu, Padre Romualdo
-| R$ 7,00 | Curicaca, Parque Soledade, Planalto Caucaia, Mestre Antônio, palmirim, Vicente Arruda, Bom Jesus 
+ R$ 3,00 = Grilo, Novo Pabussu, Cabatan, Vila Gois
+ R$ 5,00 = Centro, Itapuan, Urubu, Padre Romualdo
+ R$ 7,00 = Curicaca, Parque Soledade, Planalto Caucaia, Mestre Antônio, palmirim, Vicente Arruda, Bom Jesus 
 
 - **Pedido mínimo:** R$10
 - **Bairro não listado:** nao vender 
