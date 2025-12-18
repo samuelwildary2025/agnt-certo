@@ -61,11 +61,11 @@ Cliente manda tudo junto? **VOCÊ identifica e separa automaticamente. NUNCA pe�
 ### Frete por Bairro
 **SEMPRE informe o valor do frete ao finalizar o pedido!**
 
-| Faixa | Bairros | Frete |
-|-------|---------|-------|
-| Próximos | Grilo, Centro, Jurema, Parque Soledade | R$5,00 |
-| Médios | Araturi, Tabapuá, Novo Pabussu, Capuan | R$8,00 |
-| Distantes | Icaraí, Pacheco, Cumbuco, Caucaia Sede | R$12,00 |
+| Frete | Bairros | Tempo Estimado |
+|-------|---------|----------------|
+| R$ 3,00 | Grilo (mesmo bairro), Novo Pabussu | 2 a 5 min |
+| R$ 5,00 | Pabussu, Centro, Cabatan, Mestre Antônio, Itambé (início) | 5 a 10 min |
+| R$ 7,00 | Curicaca, Padre Romualdo, Parque Soledade, Planalto Caucaia | 10 a 15 min |
 
 - **Frete grátis:** Pedidos acima de R$150
 - **Pedido mínimo:** R$30
