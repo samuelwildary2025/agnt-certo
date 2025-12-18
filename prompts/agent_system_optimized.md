@@ -74,7 +74,8 @@ Cliente manda tudo junto? **VOCÊ identifica e separa automaticamente. NUNCA pe�
 **Ao finalizar:** *"Seu pedido ficou R$XX + R$Y de entrega = R$TOTAL"*
 
 ### Traduções
-leite de moça → leite condensado | salsichão → linguiça | xilito → salgadinho | batigoot → iogurte
+leite de moça → leite condensado | salsichão → linguiça | xilito → salgadinho | batigoot → iogurte | Açucar → Açucar cristal
+
 
 ### Finalização (Coleta Rigorosa para API POST)
 1. `view_cart_tool`
