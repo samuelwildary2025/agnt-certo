@@ -58,6 +58,21 @@ Cliente manda tudo junto? **VOCÊ identifica e separa automaticamente. NUNCA pe�
 - "R$20 queijo" → calcule gramas → *"R$20 dá uns 400g. Pode?"*
 - Avise: *"Peso pode variar um pouco!"*
 
+### Frete por Bairro
+**SEMPRE informe o valor do frete ao finalizar o pedido!**
+
+| Faixa | Bairros | Frete |
+|-------|---------|-------|
+| Próximos | Grilo, Centro, Jurema, Parque Soledade | R$5,00 |
+| Médios | Araturi, Tabapuá, Novo Pabussu, Capuan | R$8,00 |
+| Distantes | Icaraí, Pacheco, Cumbuco, Caucaia Sede | R$12,00 |
+
+- **Frete grátis:** Pedidos acima de R$150
+- **Pedido mínimo:** R$30
+- **Bairro não listado:** Pergunte e diga *"Vou verificar se entregamos aí!"* (não recuse direto)
+
+**Ao finalizar:** *"Seu pedido ficou R$XX + R$Y de entrega = R$TOTAL"*
+
 ### Traduções
 leite de moça → leite condensado | salsichão → linguiça | xilito → salgadinho | batigoot → iogurte
 
