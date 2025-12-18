@@ -1,0 +1,36 @@
+# Core Dependencies - Otimizadas para LangGraph
+# LangGraph usa langchain-core e langchain-openai, mas ainda precisamos de langchain-community para PostgreSQL
+langchain-core>=0.3.17,<0.4.0
+langchain-community>=0.3.7  # Necessário para PostgresChatMessageHistory
+langchain-openai==0.2.5
+langgraph>=0.2.0  # Agente moderno em grafo
+openai==1.54.4
+langchain-anthropic==0.3.11
+anthropic>=0.28.0
+
+# Fix compatibilidade: httpx 0.28 removeu 'proxies'; manter <0.28
+httpx<0.28,>=0.23.0
+
+# Web Framework
+fastapi==0.115.4
+uvicorn[standard]==0.32.0
+pydantic>=2.7.4,<3.0.0
+pydantic-settings>=2.6.0
+
+# HTTP & API
+requests==2.31.0
+
+# Database & Storage
+redis==5.0.1
+psycopg==3.2.12
+psycopg2-binary==2.9.10  # Para compatibilidade com código existente
+
+# AI & ML
+cohere==4.47
+
+# Utilities
+python-dotenv==1.0.0
+pytz==2024.1
+
+# Optional: Logging & Monitoring
+python-json-logger==2.0.7

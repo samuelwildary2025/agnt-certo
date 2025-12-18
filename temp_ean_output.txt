@@ -1,0 +1,24 @@
+
+Consultando smart-responder: https://gmhpegzldsuibmmvqbxs.supabase.co/functions/v1/smart-responder
+Query: arroz
+
+EANS encontrados:
+1) 7896006716112 - ARROZ PARBO CAMIL 1kg
+2) 7896224000024 - ARROZ PARBO CELIA 1kg
+3) 7896012300213 - ARROZ PARBO EMOCOES 1kg
+4) 7896389600107 - ARROZ PARBO FAZENDA 1kg
+5) 7898365320016 - ARROZ PARBO ITAGUARY 1kg
+6) 7896952700128 - ARROZ PARBO KIGOSTOSO 1kg
+7) 7896220900359 - ARROZ BRANCO ALTEZA 1kg
+8) 7898948451069 - ARROZ BRANCO BEM CASEIRO 1kg
+9) 7898902428410 - ARROZ BRANCO BOM NO PRATO 1kg
+10) 7896006711117 - ARROZ BRANCO CAMIL 1kg
+
+✅ Comunicação com Supabase OK
+
+Retorno bruto:
+
+
+[INFO] Tamanho da resposta bruta: 2250 caracteres
+[{"id":176,"content":"{\n    \"codigo_ean\": 7896006716112,\n    \"produto\": \"ARROZ PARBO CAMIL 1kg\"\n  },\n  {\n    \"codigo_ean\": 7896224000024,\n    \"produto\": \"ARROZ PARBO CELIA 1kg\"\n  },\n  {\n    \"codigo_ean\": 7896012300213,\n    \"produto\": \"ARROZ PARBO EMOCOES 1kg\"\n  },\n  {\n    \"codigo_ean\": 7896389600107,\n    \"produto\": \"ARROZ PARBO FAZENDA 1kg\"\n  },\n  {\n    \"codigo_ean\": 7898365320016,\n    \"produto\": \"ARROZ PARBO ITAGUARY 1kg\"\n  },\n  {\n    \"codigo_ean\": 7896952700128,\n    \"produto\": \"ARROZ PARBO KIGOSTOSO 1kg\"","score":0.0384757676655568,"rank":1},{"id":171,"content":"{\n    \"codigo_ean\": 7896220900359,\n    \"produto\": \"ARROZ BRANCO ALTEZA 1kg\"\n  },\n  {\n    \"codigo_ean\": 7898948451069,\n    \"produto\": \"ARROZ BRANCO BEM CASEIRO 1kg\"\n  },\n  {\n    \"codigo_ean\": 7898902428410,\n    \"produto\": \"ARROZ BRANCO BOM NO PRATO 1kg\"\n  },\n  {\n    \"codigo_ean\": 7896006711117,\n    \"produto\": \"ARROZ BRANCO CAMIL 1kg\"\n  },\n  {\n    \"codigo_ean\": 7896224000154,\n    \"produto\": \"ARROZ BRANCO CELIA 1kg\"","score":0.0384615384615385,"rank":2},{"id":177,"content":"{\n    \"codigo_ean\": 7896091700010,\n    \"produto\": \"ARROZ PARBO PREDILETO 1kg\"\n  },\n  {\n    \"codigo_ean\": 7898944991064,\n    \"produto\": \"ARROZ PARBO TIO ALEMAO 1kg\"\n  },\n  {\n    \"codigo_ean\": 7896038306053,\n    \"produto\": \"ARROZ PARBO URBANO 1kg\"\n  },\n  {\n    \"codigo_ean\": 7897626300125,\n    \"produto\": \"ARROZ PARBO VO OLIMPIO 1kg\"\n  },\n  {\n    \"codigo_ean\": 7896038306039,\n    \"produto\": \"ARROZ PARBO* URBANO 1kg\"\n  },\n  {\n    \"codigo_ean\": 41,\n    \"produto\": \"ARRUDA EFRAIM\"","score":0.0373864430468204,"rank":3},{"id":175,"content":"{\n    \"codigo_ean\": 7896038308057,\n    \"produto\": \"ARROZ INTEGRAL URBANO 1kg\"\n  },\n  {\n    \"codigo_ean\": 7898236717105,\n    \"produto\": \"ARROZ PARBO 101 1kg\"\n  },\n  {\n    \"codigo_ean\": 7898948451038,\n    \"produto\": \"ARROZ PARBO
+... (truncado)

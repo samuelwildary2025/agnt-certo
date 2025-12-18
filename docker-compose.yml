@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  # Agente de Supermercado
+  agente:
+    build: .
+    container_name: agente-supermercado
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_CONNECTION_STRING=postgresql://samuelwildary:85885885@sistema_db-agente:5432/db-agente?sslmode=disable
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - agente-network
+
+  # PostgreSQL (Memória de Conversação)
+  postgres:
+    image: postgres:15-alpine
+    container_name: agente-postgres
+    environment:
+      POSTGRES_DB: agente_db
+      POSTGRES_USER: agente_user
+      POSTGRES_PASSWORD: senha_segura
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agente_user -d agente_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - agente-network
+
+  # Redis (Controle de Estado)
+  redis:
+    image: redis:7-alpine
+    container_name: agente-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - agente-network
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  agente-network:
+    driver: bridge

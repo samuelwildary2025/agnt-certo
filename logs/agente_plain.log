@@ -1,0 +1,130 @@
+2025-11-30 02:05:46 - server - INFO - In: 558587520060 | text | Ola
+2025-11-30 02:05:46 - tools.redis_tools - INFO - Conectado ao Redis: sistema_redis-agente:6379
+2025-11-30 02:05:46 - tools.redis_tools - INFO - Mensagem empilhada no buffer: msgbuf:558587520060
+2025-11-30 02:05:56 - tools.redis_tools - INFO - Buffer consumido para 558587520060: 1 mensagens
+2025-11-30 02:06:01 - agent_langgraph_simple - INFO - Executando agente...
+2025-11-30 02:06:08 - agent_langgraph_simple - INFO - ✅ Agente executado
+2025-11-30 02:07:20 - server - INFO - In: 558587520060 | text | Quero fazer compras para esse mês porém só tenho 3
+2025-11-30 02:07:20 - tools.redis_tools - INFO - Mensagem empilhada no buffer: msgbuf:558587520060
+2025-11-30 02:07:30 - tools.redis_tools - INFO - Buffer consumido para 558587520060: 1 mensagens
+2025-11-30 02:07:33 - agent_langgraph_simple - INFO - Executando agente...
+2025-11-30 02:07:44 - agent_langgraph_simple - INFO - ✅ Agente executado
+2025-11-30 02:08:38 - server - INFO - In: 558587520060 | text | Quero uma feira completa
+2025-11-30 02:08:38 - tools.redis_tools - INFO - Mensagem empilhada no buffer: msgbuf:558587520060
+2025-11-30 02:08:49 - tools.redis_tools - INFO - Buffer consumido para 558587520060: 1 mensagens
+2025-11-30 02:08:51 - agent_langgraph_simple - INFO - Executando agente...
+2025-11-30 02:09:04 - agent_langgraph_simple - INFO - ✅ Agente executado
+2025-11-30 02:09:31 - server - INFO - In: 558587520060 | text | Pode começar
+2025-11-30 02:09:31 - tools.redis_tools - INFO - Mensagem empilhada no buffer: msgbuf:558587520060
+2025-11-30 02:09:42 - tools.redis_tools - INFO - Buffer consumido para 558587520060: 1 mensagens
+2025-11-30 02:09:45 - agent_langgraph_simple - INFO - Executando agente...
+2025-11-30 02:09:59 - tools.http_tools - INFO - Consultando smart-responder: https://gmhpegzldsuibmmvqbxs.supabase.co/functions/v1/smart-responder query='arroz 5kg'
+2025-11-30 02:10:03 - tools.http_tools - INFO - smart-responder retorno: status=200
+2025-11-30 02:10:03 - tools.http_tools - INFO - smart-responder resumo extraído: EANS_ENCONTRADOS:; 1) 7896038308057 - ARROZ INTEGRAL URBANO 1kg; 2) 7898236717105 - ARROZ PARBO 101 1kg; 3) 7898948451038 - ARROZ PARBO BEM CASEIRO 1kg; 4) 7896952777113 - ARROZ PARBO BLUE SOFT 1kg; 5) 7898902428489 - ARROZ PARBO BOM NO PRATO 1kg; 6) 7896038337057 - ARROZ BRANCO TRES MOINHOS 1kg; 7) 7897626300149 - ARROZ BRANCO VO OLIMPIO 1kg; 8) 7896038300013 - ARROZ INTEGRAL 7 GRAOS URBANO 1kg; 9) 17896038300010 - ARROZ INTEGRAL 7 GRAOS URBANO 1kg; 10) 7893500066545 - ARROZ INTEGRAL 8 GRAOS BIJU 1kg
+2025-11-30 02:10:10 - tools.http_tools - INFO - Consultando smart-responder: https://gmhpegzldsuibmmvqbxs.supabase.co/functions/v1/smart-responder query='arroz 5kg'
+2025-11-30 02:10:12 - tools.http_tools - INFO - smart-responder retorno: status=200
+2025-11-30 02:10:12 - tools.http_tools - INFO - smart-responder resumo extraído: EANS_ENCONTRADOS:; 1) 7896038308057 - ARROZ INTEGRAL URBANO 1kg; 2) 7898236717105 - ARROZ PARBO 101 1kg; 3) 7898948451038 - ARROZ PARBO BEM CASEIRO 1kg; 4) 7896952777113 - ARROZ PARBO BLUE SOFT 1kg; 5) 7898902428489 - ARROZ PARBO BOM NO PRATO 1kg; 6) 7896038337057 - ARROZ BRANCO TRES MOINHOS 1kg; 7) 7897626300149 - ARROZ BRANCO VO OLIMPIO 1kg; 8) 7896038300013 - ARROZ INTEGRAL 7 GRAOS URBANO 1kg; 9) 17896038300010 - ARROZ INTEGRAL 7 GRAOS URBANO 1kg; 10) 7893500066545 - ARROZ INTEGRAL 8 GRAOS BIJU 1kg
+2025-11-30 02:10:33 - tools.http_tools - INFO - Consultando smart-responder: https://gmhpegzldsuibmmvqbxs.supabase.co/functions/v1/smart-responder query='arroz 5kg'
+2025-11-30 02:10:33 - tools.http_tools - INFO - Consultando smart-responder: https://gmhpegzldsuibmmvqbxs.supabase.co/functions/v1/smart-responder query='feijão carioca 1kg'
+2025-11-30 02:10:33 - tools.http_tools - INFO - Consultando smart-responder: https://gmhpegzldsuibmmvqbxs.supabase.co/functions/v1/smart-responder query='óleo de soja 900ml'
+2025-11-30 02:10:33 - tools.http_tools - INFO - Consultando smart-responder: https://gmhpegzldsuibmmvqbxs.supabase.co/functions/v1/smart-responder query='leite de soja 1l'
+2025-11-30 02:10:33 - tools.http_tools - INFO - Consultando smart-responder: https://gmhpegzldsuibmmvqbxs.supabase.co/functions/v1/smart-responder query='frango inteiro 1kg'
+2025-11-30 02:10:33 - tools.http_tools - INFO - Consultando smart-responder: https://gmhpegzldsuibmmvqbxs.supabase.co/functions/v1/smart-responder query='macarrão espaguete 1kg'
+2025-11-30 02:10:34 - tools.http_tools - INFO - smart-responder retorno: status=200
+2025-11-30 02:10:34 - tools.http_tools - INFO - smart-responder resumo extraído: EANS_ENCONTRADOS:; 1) 17893000005966 - COXA FRANGO SADIA IQF 1KG; 2) 7898930906232 - COXA FRANGO TIJUCA BDJ 1kg; 3) 597 - COXA SOBRECOXA FRANGO AVE NOVA 1KG   kg; 4) 7898911000171 - COXA SOBRECOXA FRANGO AVE NOVA 1KG   kg; 5) 7898249771446 - SOBRECOXA FRANGO REGINA 1KG; 6) 17898249771443 - SOBRECOXA FRANGO REGINA 1KG; 7) 7893000005976 - SOBRECOXA FRANGO SADIA 1KG IQF; 8) 7898249773228 - FRANGO PASSARINHO REGINA 1kg; 9) 17898249773225 - FRANGO PASSARINHO REGINA 1kg; 10) 629 - FRANGO DESFIADO   kg
+2025-11-30 02:10:34 - tools.http_tools - INFO - Consultando smart-responder: https://gmhpegzldsuibmmvqbxs.supabase.co/functions/v1/smart-responder query='açúcar 1kg'
+2025-11-30 02:10:35 - tools.http_tools - INFO - smart-responder retorno: status=200
+2025-11-30 02:10:35 - tools.http_tools - INFO - smart-responder resumo extraído: EANS_ENCONTRADOS:; 1) 17896264601615 - MACARRAO ESPAGUETE GOSTOSO 400g; 2) 618341787360 - MACARRAO ESPAGUETE INTEGRAL DAMEZZA 400g; 3) 7896038314195 - MACARRAO ESPAGUETE INTEGRAL URBANO 500g; 4) 7896417202594 - MACARRAO ESPAGUETE INTEGRAL VILMA 500g; 5) 7896264671024 - MACARRAO ESPAGUETE PELAGGIO 400g; 6) 37898230897668 - MACARRAO ESPAGUETE BONSABOR 400g; 7) 7896005213018 - MACARRAO ESPAGUETE BRANDINI 500g; 8) 602883656642 - MACARRAO ESPAGUETE CORACAO NE 400g; 9) 7896005286524 - MACARRAO ESPAGUETE D.BENTA 500g; 10) 7897624111198 - MACARRAO ESPAGUETE DELICIOSO 400g
+2025-11-30 02:10:35 - tools.http_tools - INFO - Consultando smart-responder: https://gmhpegzldsuibmmvqbxs.supabase.co/functions/v1/smart-responder query='sal 1kg'
+2025-11-30 02:10:35 - tools.http_tools - INFO - smart-responder retorno: status=200
+2025-11-30 02:10:35 - tools.http_tools - INFO - smart-responder resumo extraído: EANS_ENCONTRADOS:; 1) 7898922012019 - FEIJAO CARIOCA DONA DE 1kg; 2) 7898384200023 - FEIJAO CARIOCA FIBRA 1kg; 3) 21454 - FEIJAO CARIOCA GOSTOZZO 1kg; 4) 7896393401509 - FEIJAO CARIOCA GOSTOZZO 1kg; 5) 7898922012101 - FEIJAO CARIOCA TIO CHICO 1kg; 6) 7896038365050 - FEIJAO CARIOCA URBANO 1kg; 7) 7898933603084 - FEIJAO CARIOCA YAN 1kg; 8) 7896116900029 - FEIJAO CARIOCA KICALDO 1kg; 9) 7898926342297 - FEIJAO CARIOCA KUME 1kg; 10) 7898994674740 - FEIJAO CARIOCA PAYOL 1kg
+2025-11-30 02:10:35 - tools.http_tools - INFO - Consultando smart-responder: https://gmhpegzldsuibmmvqbxs.supabase.co/functions/v1/smart-responder query='banana 1kg'
+2025-11-30 02:10:35 - tools.http_tools - INFO - smart-responder retorno: status=200
+2025-11-30 02:10:35 - tools.http_tools - INFO - smart-responder resumo extraído: EANS_ENCONTRADOS:; 1) 7898247780297 - OLEO DE SOJA VITALIV 900ml; 2) 7896279600538 - OLEO DE SOJA COAMO 900ml; 3) 7891107101621 - OLEO DE SOJA SOYA PET 900ml; 4) 17891107101628 - OLEO DE SOJA SOYA PET 900ml; 5) 7891107111927 - OLEO CANOLA SALADA 900ml; 6) 7892300000285 - OLEO CANOLA SINHA 900ml; 7) 7896036090602 - OLEO GIRASSOL LIZA 900ml; 8) 7891107111910 - OLEO GIRASSOL SALADA 900ml; 9) 7896189215051 - OLEO DESENGRIPANTE PROAUTO 321ml; 10) 7898744460760 - OLEO DE MELALEUCA AURORA COSMETICO 30ml
+2025-11-30 02:10:35 - tools.http_tools - INFO - Consultando smart-responder: https://gmhpegzldsuibmmvqbxs.supabase.co/functions/v1/smart-responder query='tomate 1kg'
+2025-11-30 02:10:35 - tools.http_tools - INFO - smart-responder retorno: status=200
+2025-11-30 02:10:35 - tools.http_tools - INFO - smart-responder resumo extraído: EANS_ENCONTRADOS:; 1) 7891910030101 - ACUCAR DEMERARA UNIAO 1kg; 2) 7898926342532 - ACUCAR MASCAVO PRECIOSO 1kg; 3) 7898365320009 - ACUCAR DEMERARA ITAGUARY 1kg; 4) 7896725201012 - ACUCAR DEMERARA OLHO DAGUA 1kg; 5) 7898994678021 - ACUCAR DEMERARA OLHO DAGUA 1kg; 6) 7898994674764 - ACUCAR DEMERARA PAYOL 1kg; 7) 7898926342105 - ACUCAR DEMERARA PRECIOSO 1kg; 8) 7898945261012 - ACUCAR CRISTAL SAMUKA 1kg; 9) 7898113620016 - ACUCAR CRISTAL YAN 1kg; 10) 7898933603022 - ACUCAR CRISTAL YAN 1kg
+2025-11-30 02:10:35 - tools.http_tools - INFO - Consultando smart-responder: https://gmhpegzldsuibmmvqbxs.supabase.co/functions/v1/smart-responder query='cebola 1kg'
+2025-11-30 02:10:35 - tools.http_tools - INFO - smart-responder retorno: status=200
+2025-11-30 02:10:35 - tools.http_tools - INFO - smart-responder resumo extraído: EANS_ENCONTRADOS:; 1) 7896038308057 - ARROZ INTEGRAL URBANO 1kg; 2) 7898236717105 - ARROZ PARBO 101 1kg; 3) 7898948451038 - ARROZ PARBO BEM CASEIRO 1kg; 4) 7896952777113 - ARROZ PARBO BLUE SOFT 1kg; 5) 7898902428489 - ARROZ PARBO BOM NO PRATO 1kg; 6) 7896038337057 - ARROZ BRANCO TRES MOINHOS 1kg; 7) 7897626300149 - ARROZ BRANCO VO OLIMPIO 1kg; 8) 7896038300013 - ARROZ INTEGRAL 7 GRAOS URBANO 1kg; 9) 17896038300010 - ARROZ INTEGRAL 7 GRAOS URBANO 1kg; 10) 7893500066545 - ARROZ INTEGRAL 8 GRAOS BIJU 1kg
+2025-11-30 02:10:35 - tools.http_tools - INFO - Consultando smart-responder: https://gmhpegzldsuibmmvqbxs.supabase.co/functions/v1/smart-responder query='sabão em pó 1kg'
+2025-11-30 02:10:35 - tools.http_tools - INFO - smart-responder retorno: status=200
+2025-11-30 02:10:35 - tools.http_tools - INFO - smart-responder resumo extraído: EANS_ENCONTRADOS:; 1) 7898403782295 - LEITE UHT SEMIDESN BETANIA 1L; 2) 7896079500175 - LEITE UHT SEMIDESN ELEGE 1L; 3) 7898080640628 - LEITE UHT SEMIDESN ITALAC 1L; 4) 7896051111764 - LEITE UHT SEMIDESN ITAMBE 1L; 5) 7897469400228 - LEITE PASTEURIZADO ZERO LACTOSE SABOR E VIDA 1L; 6) 7898403782011 - LEITE UHT ZERO BETANIA 1L; 7) 7898996123109 - LEITE CASTANHA CAJUEIRO 1lt; 8) 7891000284971 - LEITE PO LEVINHO SEMI DESN NINHO LT 350g; 9) 7891000285015 - LEITE PO MOLICO LT 260G PARC DESN+FIBRAS; 10) 7891000101506 - LEITE PO MOLICO LT 280G DESNATADO TOTAL CALCIO
+2025-11-30 02:10:35 - tools.http_tools - INFO - Consultando smart-responder: https://gmhpegzldsuibmmvqbxs.supabase.co/functions/v1/smart-responder query='sabonete barra 85g'
+2025-11-30 02:10:35 - tools.http_tools - INFO - smart-responder retorno: status=200
+2025-11-30 02:10:35 - tools.http_tools - INFO - smart-responder resumo extraído: EANS_ENCONTRADOS:; 1) 105 - BANANA  kg; 2) 7890028209553 - BANANA CHIPS PALMACIA 70G; 3) 107 - BANANA MACA kg; 4) 106 - BANANA MADURA  kg; 5) 108 - BANANA NANICA kg; 6) 7898186841554 - DOCE BANANA POTENGI POLY 250G; 7) 7898186841561 - DOCE BANANA POTENGI POLY 500G; 8) 7896963402332 - DOCE BANANADA DANTAS POLY 250G; 9) 7898162367832 - DOCE BANANADA LIMOEIRO POLY 500G; 10) 7898366930368 - DOCE BANANADA PALMEIRON POLY 250G
+2025-11-30 02:10:36 - tools.http_tools - INFO - smart-responder retorno: status=200
+2025-11-30 02:10:36 - tools.http_tools - INFO - smart-responder resumo extraído: EANS_ENCONTRADOS:; 1) 7898969607032 - MACAXEIRA PALITO DO CAMPO (10 X 1KG); 2) 7898919082247 - MACAXEIRA PALITO MM 1KG; 3) 7898590172565 - SALEIRO DE COZINHA COLOR 1KG; 4) 17893000005966 - COXA FRANGO SADIA IQF 1KG; 5) 7898930906232 - COXA FRANGO TIJUCA BDJ 1kg; 6) 597 - COXA SOBRECOXA FRANGO AVE NOVA 1KG   kg; 7) 7898911000171 - COXA SOBRECOXA FRANGO AVE NOVA 1KG   kg; 8) 208 - CEBOLA BRANCA kg; 9) 7898581261445 - CEBOLA EMBALADA 750G; 10) 209 - CEBOLA ROXA kg
+2025-11-30 02:10:36 - tools.http_tools - INFO - smart-responder retorno: status=200
+2025-11-30 02:10:36 - tools.http_tools - INFO - smart-responder resumo extraído: EANS_ENCONTRADOS:; 1) 7896040706186 - SABAO PO COQUEL SC 1KG PG 800G NAT; 2) 7891150081147 - SABAO PO OMO CX 1,6KG LAVAGEM PERFEITA; 3) 7893300522395 - SABAO EM PO ASSIM CX 900g TRIPLACAO; 4) 7908324402742 - SABAO EM PO ASSIM SC 1600g MICELAR; 5) 7908324402728 - SABAO EM PO ASSIM SC 1600g TRIPLACAO; 6) 7908324402339 - SABAO EM PO ASSIM SC 400g ANTIBACT; 7) 7908324402766 - SABAO EM PO ASSIM SC 400g FLORAL; 8) 7891150086517 - SABAO PO BRILHANTE SC 1,6KG DELICADEZA coco; 9) 7891150066632 - SABAO PO BRILHANTE SC 1,6KG HIGIENE TOTAL verde; 10) 7891150066588 - SABAO PO BRILHANTE SC 1,6KG LIMPEZA TOTAL
+2025-11-30 02:10:36 - tools.http_tools - INFO - smart-responder retorno: status=200
+2025-11-30 02:10:36 - tools.http_tools - INFO - smart-responder resumo extraído: EANS_ENCONTRADOS:; 1) 7898963177043 - TOMATE CEREJA GRAPE MEL TREBESCHI 180g; 2) 221 - TOMATE CEREJA kg; 3) 7898942930355 - TOMATE CEREJA RAMA TREBESCHI 200g; 4) 229 - TOMATE kg; 5) 7896292315310 - TOMATE PELADO PREDILECTA LT 140G; 6) 7896272009437 - TOMATE PELADO VALE FERTIL LT 400G/250G; 7) 7898167880213 - TOMATE SECO FORNELLO SC 100G; 8) 7896292303140 - EXTRATO DE TOMATE PREDILECTA SC 140G; 9) 7896292304420 - EXTRATO DE TOMATE PREDILECTA SC 300G (ANTIGO 340; 10) 7896292333123 - EXTRATO DE TOMATE PREDILECTA SC 300G (ANTIGO 340
+2025-11-30 02:10:36 - tools.http_tools - INFO - smart-responder retorno: status=200
+2025-11-30 02:10:36 - tools.http_tools - INFO - smart-responder resumo extraído: EANS_ENCONTRADOS:; 1) 7898961408019 - SAL INVICTO 1KG; 2) 7898994470632 - SAL MOIDO GLOBO 1KG; 3) 7898002362003 - SAL MOIDO INTER 1KG; 4) 630941619995 - SAL MOIDO JACARE 1KG; 5) 7898132921026 - SAL MOIDO JACARE 1KG; 6) 7898994674771 - SAL MOIDO PAYOL 1KG; 7) 7897472200013 - SAL MOIDO PURO SAL 1KG; 8) 7898002360030 - SAL MOIDO VENEZA 1KG; 9) 7898002360122 - SAL GROSSO MASTER 1KG; 10) 7898908364057 - SAL GROSSO MILMARES 1KG
+2025-11-30 02:10:37 - tools.http_tools - INFO - smart-responder retorno: status=200
+2025-11-30 02:10:37 - tools.http_tools - INFO - smart-responder resumo extraído: EANS_ENCONTRADOS:; 1) 7908324408447 - SABONETE ALBANY 85g CAPIM LIMAO; 2) 7908324404852 - SABAO EM BARRA ASSIM BARRA 180g NEUTRO; 3) 7908324401752 - SABAO EM BARRA ASSIM BARRA 80g TIRA MANCHAS; 4) 7908324403053 - SABAO EM BARRA ASSIM BARRA 80g TIRA MANCHAS; 5) 7896654100325 - SABAO EM BARRA UNO 200g FRESH; 6) 7896654100110 - SABAO EM BARRA UNO 200g MULTIUSO; 7) 7896654100332 - SABAO EM BARRA UNO 200g NEUTRO; 8) 7896056407220 - SABAO EM BARRA URCA 5X200 1000g AZUL; 9) 7896056407237 - SABAO EM BARRA URCA 5X200 1000g LIMAO; 10) 7896056407244 - SABAO EM BARRA URCA 5X200 1000g NEUTRO
+2025-11-30 02:11:01 - tools.http_tools - INFO - Consultando estoque_preco por EAN: http://45.178.95.233:5001/api/Produto/GetProdutosEAN/7896006716112
+2025-11-30 02:11:01 - tools.http_tools - INFO - Consultando estoque_preco por EAN: http://45.178.95.233:5001/api/Produto/GetProdutosEAN/7896116900029
+2025-11-30 02:11:01 - tools.http_tools - INFO - Consultando estoque_preco por EAN: http://45.178.95.233:5001/api/Produto/GetProdutosEAN/7891107101621
+2025-11-30 02:11:01 - tools.http_tools - INFO - Consultando estoque_preco por EAN: http://45.178.95.233:5001/api/Produto/GetProdutosEAN/7898945261012
+2025-11-30 02:11:01 - tools.http_tools - INFO - Consultando estoque_preco por EAN: http://45.178.95.233:5001/api/Produto/GetProdutosEAN/7898961408019
+2025-11-30 02:11:01 - tools.http_tools - INFO - Consultando estoque_preco por EAN: http://45.178.95.233:5001/api/Produto/GetProdutosEAN/17896264601615
+2025-11-30 02:11:02 - tools.http_tools - INFO - EAN 7898961408019: 1 item(s) disponíveis após filtragem
+2025-11-30 02:11:02 - tools.http_tools - INFO - EAN 17896264601615: 1 item(s) disponíveis após filtragem
+2025-11-30 02:11:02 - tools.http_tools - INFO - EAN 7896006716112: 1 item(s) disponíveis após filtragem
+2025-11-30 02:11:02 - tools.http_tools - INFO - EAN 7896116900029: 1 item(s) disponíveis após filtragem
+2025-11-30 02:11:02 - tools.http_tools - INFO - EAN 7891107101621: 1 item(s) disponíveis após filtragem
+2025-11-30 02:11:02 - tools.http_tools - INFO - EAN 7898945261012: 1 item(s) disponíveis após filtragem
+2025-11-30 02:11:02 - tools.http_tools - INFO - Consultando estoque_preco por EAN: http://45.178.95.233:5001/api/Produto/GetProdutosEAN/7897469400228
+2025-11-30 02:11:02 - tools.http_tools - INFO - Consultando estoque_preco por EAN: http://45.178.95.233:5001/api/Produto/GetProdutosEAN/17893000005966
+2025-11-30 02:11:02 - tools.http_tools - INFO - Consultando estoque_preco por EAN: http://45.178.95.233:5001/api/Produto/GetProdutosEAN/105
+2025-11-30 02:11:02 - tools.http_tools - INFO - Consultando estoque_preco por EAN: http://45.178.95.233:5001/api/Produto/GetProdutosEAN/229
+2025-11-30 02:11:02 - tools.http_tools - INFO - Consultando estoque_preco por EAN: http://45.178.95.233:5001/api/Produto/GetProdutosEAN/208
+2025-11-30 02:11:02 - tools.http_tools - INFO - Consultando estoque_preco por EAN: http://45.178.95.233:5001/api/Produto/GetProdutosEAN/7891150086517
+2025-11-30 02:11:02 - tools.http_tools - INFO - EAN 7897469400228: 1 item(s) disponíveis após filtragem
+2025-11-30 02:11:02 - tools.http_tools - INFO - Consultando estoque_preco por EAN: http://45.178.95.233:5001/api/Produto/GetProdutosEAN/7908324408447
+2025-11-30 02:11:02 - tools.http_tools - INFO - EAN 17893000005966: 1 item(s) disponíveis após filtragem
+2025-11-30 02:11:02 - tools.http_tools - INFO - EAN 105: 1 item(s) disponíveis após filtragem
+2025-11-30 02:11:02 - tools.http_tools - INFO - EAN 229: 1 item(s) disponíveis após filtragem
+2025-11-30 02:11:02 - tools.http_tools - INFO - EAN 7891150086517: 1 item(s) disponíveis após filtragem
+2025-11-30 02:11:02 - tools.http_tools - INFO - EAN 208: 1 item(s) disponíveis após filtragem
+2025-11-30 02:11:02 - tools.http_tools - INFO - EAN 7908324408447: 1 item(s) disponíveis após filtragem
+2025-11-30 02:11:44 - agent_langgraph_simple - INFO - ✅ Agente executado
+2025-11-30 02:12:01 - server - INFO - In: 558587520060 | text | Samuel
+2025-11-30 02:12:01 - tools.redis_tools - INFO - Mensagem empilhada no buffer: msgbuf:558587520060
+2025-11-30 02:12:11 - tools.redis_tools - INFO - Buffer consumido para 558587520060: 1 mensagens
+2025-11-30 02:12:14 - agent_langgraph_simple - INFO - Executando agente...
+2025-11-30 02:12:40 - agent_langgraph_simple - INFO - ✅ Agente executado
+2025-11-30 02:13:15 - server - INFO - In: 558587520060 | text | Entrega
+2025-11-30 02:13:15 - tools.redis_tools - INFO - Mensagem empilhada no buffer: msgbuf:558587520060
+2025-11-30 02:13:26 - tools.redis_tools - INFO - Buffer consumido para 558587520060: 1 mensagens
+2025-11-30 02:13:29 - agent_langgraph_simple - INFO - Executando agente...
+2025-11-30 02:13:42 - agent_langgraph_simple - INFO - ✅ Agente executado
+2025-11-30 02:14:07 - server - INFO - In: 558587520060 | text | Dinheiro
+2025-11-30 02:14:07 - tools.redis_tools - INFO - Mensagem empilhada no buffer: msgbuf:558587520060
+2025-11-30 02:14:18 - tools.redis_tools - INFO - Buffer consumido para 558587520060: 1 mensagens
+2025-11-30 02:14:20 - agent_langgraph_simple - INFO - Executando agente...
+2025-11-30 02:14:31 - agent_langgraph_simple - INFO - ✅ Agente executado
+2025-11-30 02:14:51 - server - INFO - In: 558587520060 | text | Rua São João bairro cabatan 112
+2025-11-30 02:14:51 - tools.redis_tools - INFO - Mensagem empilhada no buffer: msgbuf:558587520060
+2025-11-30 02:15:02 - tools.redis_tools - INFO - Buffer consumido para 558587520060: 1 mensagens
+2025-11-30 02:15:06 - agent_langgraph_simple - INFO - Executando agente...
+2025-11-30 02:15:16 - agent_langgraph_simple - INFO - ✅ Agente executado
+2025-11-30 02:15:43 - server - INFO - In: 558587520060 | text | Casa
+2025-11-30 02:15:43 - tools.redis_tools - INFO - Mensagem empilhada no buffer: msgbuf:558587520060
+2025-11-30 02:15:51 - server - INFO - In: 558587520060 | text | Troco pra 300
+2025-11-30 02:15:51 - tools.redis_tools - INFO - Mensagem empilhada no buffer: msgbuf:558587520060
+2025-11-30 02:16:04 - tools.redis_tools - INFO - Buffer consumido para 558587520060: 2 mensagens
+2025-11-30 02:16:06 - agent_langgraph_simple - INFO - Executando agente...
+2025-11-30 02:16:36 - tools.http_tools - INFO - Enviando pedido para: https://wildhub-wildhub-sistema-supermercado.5mos1l.easypanel.host/api/pedidos/
+2025-11-30 02:16:37 - tools.http_tools - ERROR - Erro HTTP ao enviar pedido: 422 - {"detail":[{"type":"missing","loc":["body","nome_cliente"],"msg":"Field required","input":{"cliente":"Samuel","telefone":"whatsapp_phone","itens":[{"nome":"Arroz Camil 1kg","quantidade":5,"preco_unitario":5.29,"subtotal":26.45,"nome_produto":"Arroz Camil 1kg"},{"nome":"Feijão Kicaldo 1kg","quantidade":4,"preco_unitario":6.49,"subtotal":25.96,"nome_produto":"Feijão Kicaldo 1kg"},{"nome":"Óleo de soja Soya 900ml","quantidade":1,"preco_unitario":10.99,"subtotal":10.99,"nome_produto":"Óleo de soja Soya 900ml"},{"nome":"Açúcar Samuka 1kg","quantidade":2,"preco_unitario":4.19,"subtotal":8.38,"nome_produto":"Açúcar Samuka 1kg"},{"nome":"Sal Invicto 1kg","quantidade":1,"preco_unitario":0.99,"subtotal":0.99,"nome_produto":"Sal Invicto 1kg"},{"nome":"Macarrão Espaguete Gostoso 400g","quantidade":4,"preco_unitario":3.29,"subtotal":13.16,"nome_produto":"Macarrão Espaguete Gostoso 400g"},{"nome":"Leite Zero Lactose 1L","quantidade":4,"preco_unitario":9.99,"subtotal":39.96,"nome_produto":"Leite Zero Lactose 1L"},{"nome":"Coxa de Frango Sadia 1kg","quantidade":3,"preco_unitario":13.99,"subtotal":41.97,"nome_produto":"Coxa de Frango Sadia 1kg"},{"nome":"Banana kg","quantidade":3,"preco_unitario":3.99,"subtotal":11.97,"nome_produto":"Banana kg"},{"nome":"Tomate kg","quantidade":2,"preco_unitario":3.99,"subtotal":7.98,"nome_produto":"Tomate kg"},{"nome":"Cebola kg","quantidade":2,"preco_unitario":4.99,"subtotal":9.98,"nome_produto":"Cebola kg"},{"nome":"Sabão em pó Brilhante 1,6kg","quantidade":1,"preco_unitario":22.99,"subtotal":22.99,"nome_produto":"Sabão em pó Brilhante 1,6kg"},{"nome":"Sabonete Albany 85g","quantidade":3,"preco_unitario":1.69,"subtotal":5.07,"nome_produto":"Sabonete Albany 85g"}],"total":225.85,"forma_pagamento":"DINHEIRO","endereco":"Rua São João, 112, Bairro Cabatan, Caucaia-CE. Complemento: Casa. Troco para R$300.","comprovante":""}}]}
+2025-11-30 02:16:56 - tools.http_tools - INFO - Enviando pedido para: https://wildhub-wildhub-sistema-supermercado.5mos1l.easypanel.host/api/pedidos/
+2025-11-30 02:16:57 - tools.http_tools - INFO - Pedido enviado com sucesso
+2025-11-30 02:16:59 - agent_langgraph_simple - INFO - ✅ Agente executado
+2025-12-14 01:20:49 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 61 connecting to localhost:6379. Connection refused.
+2025-12-14 03:09:05 - tools.http_tools - INFO - Consultando smart-responder: https://gmhpegzldsuibmmvqbxs.supabase.co/functions/v1/smart-responder query='arroz camil'
+2025-12-14 03:09:05 - tools.http_tools - INFO - smart-responder retorno: status=200
+2025-12-14 03:09:05 - tools.http_tools - INFO - smart-responder resumo extraído: EANS_ENCONTRADOS:; 1) 7896006716112 - ARROZ PARBO CAMIL 1kg; 2) 7896006711117 - ARROZ BRANCO CAMIL 1kg
+2025-12-14 03:09:05 - tools.http_tools - INFO - Tamanho da resposta ean_lookup: 100 caracteres
+2025-12-14 03:09:05 - tools.http_tools - INFO - Consultando estoque_preco por EAN: http://45.178.95.233:5001/api/Produto/GetProdutosEAN/7896006716112
+2025-12-14 03:09:05 - tools.http_tools - INFO - EAN 7896006716112: 1 item(s) disponíveis após filtragem
