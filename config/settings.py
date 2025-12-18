@@ -57,6 +57,9 @@ class Settings(BaseSettings):
     whatsapp_method: str = "POST"
     whatsapp_agent_number: str | None = None
     
+    # Human Takeover - Tempo de pausa quando atendente humano assume (em segundos)
+    human_takeover_ttl: int = 900  # 15 minutos padrão
+    
     # Servidor
     server_host: str = "0.0.0.0"
     server_port: int = 8000

@@ -493,6 +493,19 @@ async def webhook(req: Request, tasks: BackgroundTasks):
         logger.info(f"In: {tel} | {data['message_type']} | {txt[:50]}")
 
         if from_me:
+            # Detectar Human Takeover: Se o número do agente enviou mensagem
+            # Ativar cooldown para pausar a IA
+            agent_number = (settings.whatsapp_agent_number or "").strip()
+            if agent_number:
+                # Limpar para comparação
+                agent_clean = re.sub(r"\D", "", agent_number)
+                # Se a mensagem foi enviada PARA um cliente (não é conversa interna)
+                if tel and tel != agent_clean:
+                    # Ativar cooldown - IA pausa por X minutos
+                    ttl = settings.human_takeover_ttl  # Default: 900s (15min)
+                    set_agent_cooldown(tel, ttl)
+                    logger.info(f"🙋 Human Takeover ativado para {tel} - IA pausa por {ttl//60}min")
+            
             try: get_session_history(tel).add_ai_message(txt)
             except: pass
             return JSONResponse(content={"status":"ignored_self"})
