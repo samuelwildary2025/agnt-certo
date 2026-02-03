@@ -216,12 +216,10 @@ def search_products_vector(query: str, limit: int = 20) -> str:
         "budweiser": "cerveja budweiser lt",
         "amstel": "cerveja amstel lt",
         "bohemia": "cerveja bohemia lt",
-        # Marcas locais / Correções específicas (vô -> vo olimpio)
-        "arroz vô parboizado": "arroz vo olimpio parboizado",
-        "arroz vo parboizado": "arroz vo olimpio parboizado",
-        "arroz vô": "arroz vo olimpio",
-        "arroz vo": "arroz vo olimpio",
-        "vô": "vo",
+        # Marcas locais / Correções específicas
+        # A remoção de acentos é GENÉRICA (linha 236). Aqui só expandimos marcas abreviadas.
+        "arroz vo": "arroz vo olimpio",  # "vo" → marca completa
+        "vo olimpio": "vo olimpio",  # Manter se já vier completo
     }
     
     
