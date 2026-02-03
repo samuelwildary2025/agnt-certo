@@ -148,7 +148,13 @@ def search_products_vector(query: str, limit: int = 20) -> str:
         "carne de hamburguer": "hamburguer carne moida",
         "carne hamburguer": "hamburguer carne moida",
         "carne de hamburguer": "hamburguer carne moida",
+        "carne de hamburguer": "hamburguer carne moida",
         "carne hamburguer": "hamburguer carne moida",
+        # Snacks / Salgadinhos
+        "batata rufles": "salgadinho batata ruffles",
+        "batata ruffles": "salgadinho batata ruffles",
+        "rufles": "salgadinho batata ruffles",
+        "ruffles": "salgadinho batata ruffles",
         # Limpeza - NOVO (Qboa/Kiboa)
         "qboa": "agua sanitaria",
         "kiboa": "agua sanitaria",
@@ -265,8 +271,13 @@ def search_products_vector(query: str, limit: int = 20) -> str:
             break
     
     # Se a busca é por um produto hortifruti, adiciona contexto para melhorar a relevância
+    # Se a busca é por um produto hortifruti, adiciona contexto para melhorar a relevância
     # MAS: Se a busca contém termos de produtos processados, NÃO aplicar boost de hortifruti
-    PROCESSED_TERMS = ["doce", "suco", "molho", "extrato", "polpa", "geleia", "compota", "refresco", "refrescou"]
+    PROCESSED_TERMS = [
+        "doce", "suco", "molho", "extrato", "polpa", "geleia", "compota", "refresco", "refrescou",
+        "rufles", "ruffles", "batata palha", "batata chips", "chips", "salgadinho", "snack",
+        "cheetos", "fandangos", "doritos", "pringles", "stax", "baconzitos", "cebolitos"
+    ]
     is_processed = any(term in query_lower for term in PROCESSED_TERMS)
     
     if not is_processed:
