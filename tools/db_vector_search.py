@@ -124,7 +124,12 @@ def search_products_vector(query: str, limit: int = 20) -> str:
         "biscoito chocolate": "biscoito recheado amori chocolate",
         "biscoito de chocolate": "biscoito recheado amori chocolate",
         "biscoito chocolate pequeno": "biscoito recheado amori chocolate pequeno",
+
         "biscoito de chocolate pequeno": "biscoito recheado amori chocolate pequeno",
+        # Cookies - PRIORIZAR BAUDUCCO
+        "cookies": "cookies bauducco original",
+        "cookie": "cookies bauducco original",
+        "biscoito cookies": "cookies bauducco original",
         # Refrigerantes - MELHORADO
         "guarana": "refrig guarana antarctica",
         "coca cola": "refrig coca cola pet",
