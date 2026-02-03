@@ -632,7 +632,7 @@ def vendedor_node(state: AgentState) -> dict:
     set_current_phone(state["phone"])
     
     prompt = load_prompt("vendedor.md")
-    llm = _build_llm(temperature=0.4)  # Conversa natural, simpatia
+    llm = _build_llm(temperature=0.0)  # Temperatura 0 para seguir regras do prompt
     
     # Criar agente ReAct com as ferramentas do vendedor
     agent = create_react_agent(llm, VENDEDOR_TOOLS, prompt=prompt)
