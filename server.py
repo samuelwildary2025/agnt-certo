@@ -982,6 +982,190 @@ async def root(): return {"status":"online", "ver":"1.7.0", "queue":"enabled"}
 @app.get("/health")
 async def health(): return {"status":"healthy", "ts":datetime.now().isoformat()}
 
+@app.get("/graph")
+async def graph():
+    """
+    Retorna uma página HTML interativa com o diagrama do fluxo do agente multi-agente.
+    Acesse: https://seu-app.easypanel.io/graph
+    """
+    from fastapi.responses import HTMLResponse
+    
+    html_content = """
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>🤖 Fluxo do Agente Multi-Agente</title>
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+                min-height: 100vh;
+                color: #e4e4e4;
+            }
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            header {
+                text-align: center;
+                padding: 30px 0;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                margin-bottom: 30px;
+            }
+            h1 {
+                font-size: 2.5rem;
+                background: linear-gradient(90deg, #00d9ff, #00ff88);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                margin-bottom: 10px;
+            }
+            .subtitle { color: #8892b0; font-size: 1.1rem; }
+            .diagram-container {
+                background: rgba(255,255,255,0.05);
+                border-radius: 16px;
+                padding: 30px;
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255,255,255,0.1);
+                margin-bottom: 30px;
+            }
+            .mermaid {
+                display: flex;
+                justify-content: center;
+            }
+            .legend {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+                margin-top: 30px;
+            }
+            .legend-item {
+                background: rgba(255,255,255,0.05);
+                border-radius: 12px;
+                padding: 20px;
+                border-left: 4px solid;
+            }
+            .legend-item.orchestrator { border-color: #f39c12; }
+            .legend-item.vendedor { border-color: #3498db; }
+            .legend-item.caixa { border-color: #27ae60; }
+            .legend-item.analista { border-color: #9b59b6; }
+            .legend-item h3 { margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+            .legend-item ul { padding-left: 20px; color: #8892b0; }
+            .legend-item li { margin: 5px 0; }
+            footer {
+                text-align: center;
+                padding: 20px;
+                color: #8892b0;
+                font-size: 0.9rem;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>🤖 Agente Multi-Agente</h1>
+                <p class="subtitle">Arquitetura de Fluxo do Sistema de Atendimento</p>
+            </header>
+
+            <div class="diagram-container">
+                <div class="mermaid">
+graph TD
+    START([🚀 START]) --> ORCH[🧠 Orquestrador]
+    
+    ORCH -->|"intent = vendas"| VEND[👩‍💼 Vendedor]
+    ORCH -->|"intent = checkout"| CAIXA[💰 Caixa]
+    
+    VEND -->|"busca_analista"| ANAL[🔍 Analista]
+    ANAL -->|"retorna produtos + preços"| VEND
+    
+    VEND --> END1([🏁 END])
+    
+    CAIXA -->|"Finaliza pedido"| END2([🏁 END])
+    CAIXA -->|"Cliente quer alterar"| ORCH
+    
+    style START fill:#2ecc71,stroke:#27ae60,color:#fff
+    style END1 fill:#e74c3c,stroke:#c0392b,color:#fff
+    style END2 fill:#e74c3c,stroke:#c0392b,color:#fff
+    style ORCH fill:#f39c12,stroke:#e67e22,color:#fff
+    style VEND fill:#3498db,stroke:#2980b9,color:#fff
+    style CAIXA fill:#27ae60,stroke:#1e8449,color:#fff
+    style ANAL fill:#9b59b6,stroke:#8e44ad,color:#fff
+                </div>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item orchestrator">
+                    <h3>🧠 Orquestrador</h3>
+                    <p>Classifica a intenção do cliente:</p>
+                    <ul>
+                        <li><strong>vendas</strong> → Pedir produtos, preços, estoque</li>
+                        <li><strong>checkout</strong> → Finalizar, pagar, endereço</li>
+                    </ul>
+                </div>
+                
+                <div class="legend-item vendedor">
+                    <h3>👩‍💼 Vendedor</h3>
+                    <p>Ferramentas disponíveis:</p>
+                    <ul>
+                        <li>busca_analista (→ Analista)</li>
+                        <li>add_item_tool</li>
+                        <li>view_cart_tool</li>
+                        <li>remove_item_tool</li>
+                        <li>consultar_encarte</li>
+                        <li>get_pending_suggestions</li>
+                    </ul>
+                </div>
+                
+                <div class="legend-item analista">
+                    <h3>🔍 Analista de Produtos</h3>
+                    <p>Sub-agente chamado pelo Vendedor:</p>
+                    <ul>
+                        <li>Busca vetorial (embeddings)</li>
+                        <li>Consulta EAN e preço</li>
+                        <li>Valida estoque</li>
+                        <li>Retorna JSON com produtos</li>
+                    </ul>
+                </div>
+                
+                <div class="legend-item caixa">
+                    <h3>💰 Caixa</h3>
+                    <p>Ferramentas disponíveis:</p>
+                    <ul>
+                        <li>view_cart_tool</li>
+                        <li>calcular_total_tool</li>
+                        <li>salvar_endereco_tool</li>
+                        <li>finalizar_pedido_tool</li>
+                    </ul>
+                </div>
+            </div>
+
+            <footer>
+                <p>Sistema de Atendimento Multi-Agente v5.0 | LangGraph + Gemini</p>
+            </footer>
+        </div>
+
+        <script>
+            mermaid.initialize({
+                theme: 'dark',
+                themeVariables: {
+                    primaryColor: '#3498db',
+                    primaryTextColor: '#fff',
+                    primaryBorderColor: '#2980b9',
+                    lineColor: '#8892b0',
+                    secondaryColor: '#27ae60',
+                    tertiaryColor: '#f39c12'
+                }
+            });
+        </script>
+    </body>
+    </html>
+    """
+    return HTMLResponse(content=html_content)
+
 @app.post("/")
 @app.post("/webhook/whatsapp")
 async def webhook(req: Request, tasks: BackgroundTasks):
