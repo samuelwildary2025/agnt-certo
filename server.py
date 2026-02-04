@@ -38,6 +38,7 @@ from tools.redis_tools import (
     start_order_session,
     refresh_session_ttl,
     get_order_context,
+    clear_cart,
 )
 
 logger = setup_logger(__name__)
@@ -1028,7 +1029,8 @@ async def webhook(req: Request, tasks: BackgroundTasks):
                     # Ativar cooldown - IA pausa por X minutos
                     ttl = settings.human_takeover_ttl  # Default: 900s (15min)
                     set_agent_cooldown(tel, ttl)
-                    logger.info(f"🙋 Human Takeover ativado para {tel} - IA pausa por {ttl//60}min")
+                    clear_cart(tel)  # Limpa o carrinho/sessão ao assumir
+                    logger.info(f"🙋 Human Takeover ativado para {tel} - IA pausa por {ttl//60}min - Carrinho limpo")
             
             try: get_session_history(tel).add_ai_message(txt)
             except: pass
