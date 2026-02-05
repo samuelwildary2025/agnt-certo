@@ -493,6 +493,7 @@ def add_item_to_cart(telefone: str, item_json: str) -> bool:
             existing_item = current_items[found_index]
             
             # Somar quantidades
+            # Somar quantidades
             try:
                 nova_qtd = float(existing_item.get("quantidade", 0)) + float(new_item.get("quantidade", 0))
                 existing_item["quantidade"] = nova_qtd
@@ -512,10 +513,8 @@ def add_item_to_cart(telefone: str, item_json: str) -> bool:
                 
                 logger.info(f"🔄 Item '{new_prod_name}' atualizado no carrinho (MERGE): {nova_qtd}")
                 
-                # Reescrever carrinho inteiro (seguro)
-                client.delete(key)
-                for item in current_items:
-                    client.rpush(key, json.dumps(item, ensure_ascii=False))
+                # ATUALIZAÇÃO SEGURA (LSET) - Não apaga o carrinho inteiro!
+                client.lset(key, found_index, json.dumps(existing_item, ensure_ascii=False))
                     
             except Exception as e:
                 logger.error(f"Erro ao fazer merge de itens: {e}")
