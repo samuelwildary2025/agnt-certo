@@ -417,7 +417,8 @@ def _extract_incoming(payload: Dict[str, Any]) -> Dict[str, Any]:
         return num
 
     chat = payload.get("chat") or {}
-    message_any = payload.get("message") or {}
+    # BUGFIX: Após promoção, payload JÁ É a mensagem, não precisa buscar "message" de novo
+    message_any = payload  # Era: payload.get("message") or {} - que retornava {} vazio!
     
     if isinstance(payload.get("messages"), list):
         try:
