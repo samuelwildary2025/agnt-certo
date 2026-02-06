@@ -85,6 +85,7 @@ Descarte itens que não correspondam a:
 - feijão → **Feijão Carioca**
 - óleo → **Óleo de Soja**
 - carioquinha → **Pão Francês**
+- pacote de pao → **PAO HAMBURGUER FATIMA 400G ou PAO HAMBURGUER MAXPAES 400G**
 
 ### 🧴 Outros
 - chinelo / sandália → **Havaianas**
