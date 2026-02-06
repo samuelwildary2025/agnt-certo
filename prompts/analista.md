@@ -69,6 +69,8 @@ Descarte itens que não correspondam a:
 - calabresa → **Linguiça Calabresa KG**
 - presunto → **Presunto KG**
 - mussarela → **Mussarela KG**
+- linguiça → **Linguiça Calabresa KG** (Se pedido por unidade/gomos, buscar KG)
+- linguiça churrasco → **Linguiça Toscana KG** (Se pedido por unidade/gomos, buscar KG)
 
 ### 🥤 Bebidas
 - coca zero (sem tamanho) → **Coca-Cola Zero 2L**
