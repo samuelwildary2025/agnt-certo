@@ -535,7 +535,7 @@ def load_prompt(filename: str) -> str:
 
 def _build_llm(temperature: float = 0.0, model_override: str = None):
     """Constrói um LLM baseado nas configurações."""
-    model = model_override or getattr(settings, "llm_model", "gemini-2.5-flash")
+    model = model_override or getattr(settings, "llm_model", "gemini-1.5-flash")
     provider = getattr(settings, "llm_provider", "google")
     
     if provider == "google":

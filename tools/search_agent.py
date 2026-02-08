@@ -190,7 +190,7 @@ def _get_fast_llm():
     global _HTTP_CLIENT_CACHE, _HTTP_ASYNC_CLIENT_CACHE
 
     # PREFERÊNCIA: Usar o modelo configurado no settings (ex: grok-beta)
-    model_name = getattr(settings, "llm_model", "gemini-2.5-flash")
+    model_name = getattr(settings, "llm_model", "gemini-1.5-flash")
     temp = 0.0 # Temperatura zero para precisão
     
     # Se quiser forçar um modelo mais leve para providers específicos:
@@ -232,7 +232,7 @@ def _get_fast_llm():
 
 def _get_analista_llm():
     provider = (getattr(settings, "analista_llm_provider", None) or settings.llm_provider or "google").lower().strip()
-    model_name = (getattr(settings, "analista_llm_model", None) or getattr(settings, "llm_model", None) or "gemini-2.5-flash")
+    model_name = (getattr(settings, "analista_llm_model", None) or getattr(settings, "llm_model", None) or "gemini-1.5-flash")
     temp = getattr(settings, "analista_llm_temperature", None)
     if temp is None:
         temp = 0.0
