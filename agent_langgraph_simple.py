@@ -570,9 +570,9 @@ def load_system_prompt() -> str:
         raise
 
 def _build_llm(model_override: str = None):
-    model = model_override or settings.llm_model
-    temp = float(settings.llm_temperature) if settings.llm_temperature is not None else 0.0
-    provider = settings.llm_provider
+    model = model_override or getattr(settings, "llm_model", "gemini-2.5-flash")
+    temp = float(getattr(settings, "llm_temperature", 0.0))
+    provider = getattr(settings, "llm_provider", "google")
     
     if provider == "google":
         logger.info(f"🚀 Usando Google Gemini: {model}")
@@ -591,13 +591,10 @@ def _build_llm(model_override: str = None):
             client_kwargs["base_url"] = settings.openai_api_base
             logger.info(f"   ↳ Custom Base URL: {settings.openai_api_base}")
 
-        m = (model or "").lower().strip()
-        supports_temp = not (m.startswith("gpt-5") or m.startswith("gpt5") or "gpt-5" in m or m.startswith("o1") or m.startswith("o3"))
-        temperature_value = temp if supports_temp else 1.0
         return ChatOpenAI(
             model=model,
             api_key=settings.openai_api_key,
-            temperature=temperature_value,
+            temperature=temp,
             **client_kwargs
         )
 
@@ -722,21 +719,52 @@ def run_agent_langgraph(telefone: str, mensagem: str) -> Dict[str, Any]:
         config = {"configurable": {"thread_id": telefone}, "recursion_limit": 15}
 
         
-        logger.info("Executando agente...")
-
-        # Execução direta SEM contador de tokens (solicitado pelo usuário)
-        result = agent.invoke(initial_state, config)
+        # RETRY AUTOMÁTICO com FALLBACK para Gemini 2.0 Flash
+        max_retries = 2
+        llm_generated_nothing = True
+        result = None
+        fallback_model = "gemini-2.5-flash"
+        
+        for attempt in range(max_retries + 1):
+            # Na segunda tentativa, usar modelo de fallback
+            if attempt > 0:
+                logger.warning(f"🔄 Tentativa {attempt + 1}/{max_retries + 1} - Tentando com {fallback_model}...")
+                import time
+                time.sleep(0.3)  # Pequeno delay entre tentativas
+                agent = get_agent_graph(model_override=fallback_model)
             
-        # Check real para saber se o LLM gerou algo
-        has_ai_response = False
-        if result and isinstance(result, dict) and "messages" in result:
-            ms = result["messages"]
-            if ms and isinstance(ms[-1], AIMessage):
-                last_msg = ms[-1]
-                if (last_msg.content and str(last_msg.content).strip()) or (hasattr(last_msg, 'tool_calls') and last_msg.tool_calls):
-                    has_ai_response = True
-
-        llm_generated_nothing = not has_ai_response
+            logger.info("Executando agente...")
+            
+            logger.info("Executando agente...")
+            
+            # Execução direta SEM contador de tokens (solicitado pelo usuário)
+            result = agent.invoke(initial_state, config)
+            
+            # Check real para saber se o LLM gerou algo
+            has_ai_response = False
+            if result and isinstance(result, dict) and "messages" in result:
+                # Verifica se a última mensagem é do tipo AIMessage
+                ms = result["messages"]
+                if ms and isinstance(ms[-1], AIMessage):
+                    last_msg = ms[-1]
+                    # Considera que TEVE resposta se tiver texto OU tool_calls
+                    if (last_msg.content and str(last_msg.content).strip()) or (hasattr(last_msg, 'tool_calls') and last_msg.tool_calls):
+                        has_ai_response = True
+            
+            # Se has_ai_response for True, então NÃO gerou "nada".
+            llm_generated_nothing = not has_ai_response
+            
+            # Se gerou algo, sair do loop
+            if not llm_generated_nothing:
+                if attempt > 0:
+                    logger.info(f"✅ Retry bem-sucedido na tentativa {attempt + 1}")
+                break
+            else:
+                logger.warning(f"⚠️ Resposta considerada vazia/inválida. Última msg: {type(result['messages'][-1]).__name__ if result and 'messages' in result and result['messages'] else 'None'}")
+                if result and 'messages' in result and result['messages']:
+                    last = result['messages'][-1]
+                    # FORCE LOG AT WARNING LEVEL TO SEE DUMP
+                    logger.warning(f"🔍 DUMP LAST MSG: Content='{last.content}' | ToolCalls={getattr(last, 'tool_calls', 'N/A')} | AddKwargs={last.additional_kwargs} | Dict={last.dict() if hasattr(last, 'dict') else 'N/A'}")
 
         
         # 4. Extrair resposta (com fallback para Gemini empty responses)

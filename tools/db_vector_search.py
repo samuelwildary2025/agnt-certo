@@ -285,7 +285,8 @@ def _extract_ean_and_name(result: dict) -> tuple[str, str]:
     Extrai EAN e nome do produto do resultado.
     O n8n salva os dados em 'text' (conteúdo) e 'metadata' (JSON).
     """
-    text_raw = (result or {}).get("text", "")
+    result = result if isinstance(result, dict) else {}
+    text_raw = result.get("text", "")
     if text_raw is None:
         text = ""
     elif isinstance(text_raw, str):
@@ -293,7 +294,7 @@ def _extract_ean_and_name(result: dict) -> tuple[str, str]:
     else:
         text = str(text_raw)
 
-    metadata = (result or {}).get("metadata") or {}
+    metadata = result.get("metadata") or {}
     
     # Tentar extrair do metadata primeiro (mais confiável)
     if isinstance(metadata, str):

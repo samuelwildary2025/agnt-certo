@@ -115,27 +115,22 @@ def _run_analista_agent_for_term(term: str, telefone: Optional[str] = None) -> d
 _HTTP_CLIENT_CACHE = None
 _HTTP_ASYNC_CLIENT_CACHE = None
 
-def _openai_model_supports_temperature(model: str) -> bool:
-    m = (model or "").lower().strip()
-    if m.startswith("gpt-5") or m.startswith("gpt5") or "gpt-5" in m:
-        return False
-    if m.startswith("o1") or m.startswith("o3"):
-        return False
-    return True
-
-def _openai_temperature_value(model: str, desired_temp: float) -> float:
-    if _openai_model_supports_temperature(model):
-        return desired_temp
-    return 1.0
-
 def _get_fast_llm():
     """Retorna um modelo rápido e barato para tarefas de sub-agente."""
     global _HTTP_CLIENT_CACHE, _HTTP_ASYNC_CLIENT_CACHE
 
     # PREFERÊNCIA: Usar o modelo configurado no settings (ex: grok-beta)
-    model_name = settings.llm_model
-    temp = float(settings.llm_temperature) if settings.llm_temperature is not None else 0.0
-
+    model_name = getattr(settings, "llm_model", "gemini-2.5-flash")
+    temp = 0.0 # Temperatura zero para precisão
+    
+    # Se quiser forçar um modelo mais leve para providers específicos:
+    if settings.llm_provider == "openai" and "gpt" in model_name:
+         # Se for OpenAI oficial, podemos tentar o mini. Se for xAI (que usa client openai), mantemos o do settings.
+         if "x.ai" not in str(settings.openai_api_base):
+            model_name = "gpt-4o-mini" 
+         
+    # Se houver override no settings, respeitar (mas idealmente forçamos um modelo rápido aqui)
+    
     if settings.llm_provider == "google":
         return ChatGoogleGenerativeAI(
             model=model_name,
@@ -158,7 +153,7 @@ def _get_fast_llm():
         return ChatOpenAI(
             model=model_name,
             api_key=settings.openai_api_key,
-            temperature=_openai_temperature_value(model_name, temp),
+            temperature=temp,
             http_client=_HTTP_CLIENT_CACHE,
             http_async_client=_HTTP_ASYNC_CLIENT_CACHE,
             **client_kwargs

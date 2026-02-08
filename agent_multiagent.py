@@ -516,31 +516,17 @@ def load_prompt(filename: str) -> str:
 # Construção dos LLMs
 # ============================================
 
-def _openai_model_supports_temperature(model: str) -> bool:
-    m = (model or "").lower().strip()
-    if m.startswith("gpt-5") or m.startswith("gpt5") or "gpt-5" in m:
-        return False
-    if m.startswith("o1") or m.startswith("o3"):
-        return False
-    return True
-
-def _openai_temperature_value(model: str, desired_temp: float) -> float:
-    if _openai_model_supports_temperature(model):
-        return desired_temp
-    return 1.0
-
 def _build_llm(temperature: float = 0.0, model_override: str = None):
     """Constrói um LLM baseado nas configurações."""
-    model = model_override or settings.llm_model
-    provider = settings.llm_provider
-    desired_temp = float(settings.llm_temperature) if settings.llm_temperature is not None else float(temperature)
+    model = model_override or getattr(settings, "llm_model", "gemini-2.5-flash")
+    provider = getattr(settings, "llm_provider", "google")
     
     if provider == "google":
         logger.debug(f"🚀 Usando Google Gemini: {model}")
         return ChatGoogleGenerativeAI(
             model=model,
             google_api_key=settings.google_api_key,
-            temperature=desired_temp,
+            temperature=temperature,
         )
     else:
         logger.debug(f"🚀 Usando OpenAI (compatível): {model}")
@@ -552,13 +538,14 @@ def _build_llm(temperature: float = 0.0, model_override: str = None):
         return ChatOpenAI(
             model=model,
             api_key=settings.openai_api_key,
-            temperature=_openai_temperature_value(model, desired_temp),
+            temperature=temperature,
             **client_kwargs
         )
 
 def _build_fast_llm():
     """Constrói um LLM rápido e leve para o Orquestrador."""
-    return _build_llm()
+    # Usa o mesmo modelo mas com temperatura 0 para determinismo
+    return _build_llm(temperature=0.0)
 
 # ============================================
 # Nós do Grafo (Agentes)

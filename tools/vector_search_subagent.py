@@ -16,19 +16,6 @@ from tools.db_vector_search import search_products_vector
 
 logger = setup_logger(__name__)
 
-def _openai_model_supports_temperature(model: str) -> bool:
-    m = (model or "").lower().strip()
-    if m.startswith("gpt-5") or m.startswith("gpt5") or "gpt-5" in m:
-        return False
-    if m.startswith("o1") or m.startswith("o3"):
-        return False
-    return True
-
-def _openai_temperature_value(model: str, desired_temp: float) -> float:
-    if _openai_model_supports_temperature(model):
-        return desired_temp
-    return 1.0
-
 
 VECTOR_SEARCH_AGENT_PROMPT = """
 Você é o AGENTE BANCO VETORIAL do Mercadinho Queiroz.
@@ -43,8 +30,12 @@ REGRAS:
 
 
 def _get_fast_llm():
-    model_name = settings.llm_model
-    temp = float(settings.llm_temperature) if settings.llm_temperature is not None else 0.0
+    model_name = getattr(settings, "llm_model", "gemini-2.5-flash")
+    temp = 0.0
+
+    if settings.llm_provider == "openai" and "gpt" in model_name:
+        if "x.ai" not in str(settings.openai_api_base):
+            model_name = "gpt-4o-mini"
 
     if settings.llm_provider == "google":
         return ChatGoogleGenerativeAI(
@@ -60,7 +51,7 @@ def _get_fast_llm():
     return ChatOpenAI(
         model=model_name,
         api_key=settings.openai_api_key,
-        temperature=_openai_temperature_value(model_name, temp),
+        temperature=temp,
         **client_kwargs,
     )
 

@@ -3,7 +3,7 @@ Configurações do Agente de Supermercado
 Carrega variáveis de ambiente usando Pydantic Settings
 """
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import Field, field_validator, model_validator
+from pydantic import Field, field_validator
 from typing import Optional
 
 
@@ -20,10 +20,10 @@ class Settings(BaseSettings):
     openai_api_key: Optional[str] = None
     openai_embedding_api_key: Optional[str] = None # Chave específica para embeddings (OpenAI)
     google_api_key: Optional[str] = None
-    llm_model: str
-    llm_temperature: Optional[float] = None
-    llm_provider: str
-    gemini_audio_model: Optional[str] = None
+    llm_model: Optional[str] = None
+    llm_temperature: float = 0.0  # Zero para respostas determinísticas
+    llm_provider: str = "google"   # Mantido padrão mas pode ser sobrescrito pelo env
+    gemini_audio_model: str = "gemini-1.5-flash" # Modelo padrão para áudio, configurável no env
     openai_api_base: Optional[str] = None # Para usar Grok (xAI) ou outros compatíveis
     moonshot_api_key: Optional[str] = None
     moonshot_api_url: str = "https://api.moonshot.ai/anthropic"
@@ -108,24 +108,6 @@ class Settings(BaseSettings):
         if len(s) >= 2 and ((s[0] == s[-1] == "`") or (s[0] == s[-1] == '"') or (s[0] == s[-1] == "'")):
             s = s[1:-1].strip()
         return s
-
-    @model_validator(mode="after")
-    def _validate_llm_config(self):
-        provider = (self.llm_provider or "").strip().lower()
-        if provider not in ("openai", "google"):
-            raise ValueError("LLM_PROVIDER deve ser 'openai' ou 'google'")
-
-        model = (self.llm_model or "").strip()
-        if not model:
-            raise ValueError("LLM_MODEL é obrigatório")
-
-        if provider == "openai":
-            if not (self.openai_api_key or "").strip():
-                raise ValueError("OPENAI_API_KEY é obrigatório quando LLM_PROVIDER=openai")
-        if provider == "google":
-            if not (self.google_api_key or "").strip():
-                raise ValueError("GOOGLE_API_KEY é obrigatório quando LLM_PROVIDER=google")
-        return self
 
 
     @property
