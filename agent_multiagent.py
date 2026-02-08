@@ -516,17 +516,24 @@ def load_prompt(filename: str) -> str:
 # Construção dos LLMs
 # ============================================
 
+def _openai_model_supports_temperature(model: str) -> bool:
+    m = (model or "").lower().strip()
+    if m.startswith("gpt-5") or m.startswith("gpt5") or "gpt-5" in m:
+        return False
+    return True
+
 def _build_llm(temperature: float = 0.0, model_override: str = None):
     """Constrói um LLM baseado nas configurações."""
     model = model_override or getattr(settings, "llm_model", "gemini-2.5-flash")
     provider = getattr(settings, "llm_provider", "google")
+    desired_temp = float(getattr(settings, "llm_temperature", temperature))
     
     if provider == "google":
         logger.debug(f"🚀 Usando Google Gemini: {model}")
         return ChatGoogleGenerativeAI(
             model=model,
             google_api_key=settings.google_api_key,
-            temperature=temperature,
+            temperature=desired_temp,
         )
     else:
         logger.debug(f"🚀 Usando OpenAI (compatível): {model}")
@@ -535,17 +542,22 @@ def _build_llm(temperature: float = 0.0, model_override: str = None):
         if settings.openai_api_base:
             client_kwargs["base_url"] = settings.openai_api_base
 
+        if _openai_model_supports_temperature(model):
+            return ChatOpenAI(
+                model=model,
+                api_key=settings.openai_api_key,
+                temperature=desired_temp,
+                **client_kwargs
+            )
         return ChatOpenAI(
             model=model,
             api_key=settings.openai_api_key,
-            temperature=temperature,
             **client_kwargs
         )
 
 def _build_fast_llm():
     """Constrói um LLM rápido e leve para o Orquestrador."""
-    # Usa o mesmo modelo mas com temperatura 0 para determinismo
-    return _build_llm(temperature=0.0)
+    return _build_llm()
 
 # ============================================
 # Nós do Grafo (Agentes)

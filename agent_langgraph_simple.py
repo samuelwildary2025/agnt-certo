@@ -591,10 +591,18 @@ def _build_llm(model_override: str = None):
             client_kwargs["base_url"] = settings.openai_api_base
             logger.info(f"   ↳ Custom Base URL: {settings.openai_api_base}")
 
+        m = (model or "").lower().strip()
+        supports_temp = not (m.startswith("gpt-5") or m.startswith("gpt5") or "gpt-5" in m)
+        if supports_temp:
+            return ChatOpenAI(
+                model=model,
+                api_key=settings.openai_api_key,
+                temperature=temp,
+                **client_kwargs
+            )
         return ChatOpenAI(
             model=model,
             api_key=settings.openai_api_key,
-            temperature=temp,
             **client_kwargs
         )
 
