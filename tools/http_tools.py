@@ -543,24 +543,31 @@ def estoque_preco(ean: str) -> str:
                 if not _is_available(it):
                     continue  # manter apenas itens com estoque/disponibilidade
 
-                # Cria dict limpo apenas com campos essenciais
-                clean = {}
-                
-                # Copiar apenas identificadores básicos se existirem
-                for k in ["produto", "nome", "descricao", "id", "ean", "cod_barra"]:
-                    if k in it: clean[k] = it[k]
+                # Cria dict limpo apenas com campos úteis para o agente
+                clean: Dict[str, Any] = {}
 
-                # Normalizar disponibilidade (se passou no _is_available, é True)
-                clean["disponibilidade"] = True
+                produto_nome = it.get("produto") or it.get("nome") or it.get("descricao")
+                if produto_nome:
+                    clean["produto"] = produto_nome
 
-                # Normalizar preço em campo unificado
                 price = _extract_price(it)
                 if price is not None:
                     clean["preco"] = price
+                    clean["vl_produto"] = price
 
-                qty = _extract_qty(it)
-                if qty is not None:
-                    clean["quantidade"] = qty
+                preco_normal = _parse_float(it.get("vl_produto_normal"))
+                if preco_normal is not None:
+                    clean["vl_produto_normal"] = preco_normal
+
+                qtd_prod = _parse_float(it.get("qtd_produto"))
+                if qtd_prod is not None:
+                    clean["qtd_produto"] = qtd_prod
+
+                for k in ["dt_cadastro", "classificacao01", "classificacao02", "classificacao03", "fracionado", "ativo", "fracionamento", "emb"]:
+                    if k in it:
+                        clean[k] = it.get(k)
+
+                clean["disponibilidade"] = True
 
                 sanitized.append(clean)
 
