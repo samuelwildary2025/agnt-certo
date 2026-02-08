@@ -346,18 +346,31 @@ def estoque_preco(ean: str) -> str:
 
     # CIRCUIT BREAKER CHECK
     from tools.redis_tools import check_circuit_open, report_failure, report_success
+    from tools.redis_tools import get_redis_client
     SERVICE_NAME = "estoque_api"
+    CACHE_TTL = 21600
     
-    if check_circuit_open(SERVICE_NAME):
-        msg = "⚠️ O sistema de estoque está instável no momento. Tente novamente em alguns minutos."
-        logger.warning(f"Circuit Breaker impediu chamada para {ean}")
-        return msg
-
     # manter apenas dígitos no EAN
     ean_digits = "".join(ch for ch in ean if ch.isdigit())
     if not ean_digits:
         msg = "Erro: EAN inválido. Informe apenas números."
         logger.error(msg)
+        return msg
+
+    cache_key = f"estoque_preco_cache:{ean_digits}"
+
+    if check_circuit_open(SERVICE_NAME):
+        client = get_redis_client()
+        if client is not None:
+            try:
+                cached = client.get(cache_key)
+                if cached:
+                    logger.warning(f"Circuit Breaker ativo; retornando cache para EAN {ean_digits}")
+                    return cached if isinstance(cached, str) else str(cached)
+            except Exception:
+                pass
+        msg = "⚠️ O sistema de estoque está instável no momento. Tente novamente em alguns minutos."
+        logger.warning(f"Circuit Breaker impediu chamada para {ean_digits}")
         return msg
 
     url = f"{base}/{ean_digits}"
@@ -553,7 +566,14 @@ def estoque_preco(ean: str) -> str:
 
             logger.info(f"EAN {ean_digits}: {len(sanitized)} item(s) disponíveis após filtragem")
 
-            return json.dumps(sanitized, indent=2, ensure_ascii=False)
+            out = json.dumps(sanitized, indent=2, ensure_ascii=False)
+            client = get_redis_client()
+            if client is not None:
+                try:
+                    client.set(cache_key, out, ex=CACHE_TTL)
+                except Exception:
+                    pass
+            return out
 
         except requests.exceptions.Timeout:
             last_error = f"Timeout (tentativa {attempt + 1}/{MAX_RETRIES})"
@@ -582,7 +602,16 @@ def estoque_preco(ean: str) -> str:
             report_failure(SERVICE_NAME)
             return msg
     
-    # Se esgotou todas as tentativas
+    client = get_redis_client()
+    if client is not None:
+        try:
+            cached = client.get(cache_key)
+            if cached:
+                logger.warning(f"Falha consultando EAN {ean_digits}; retornando cache")
+                return cached if isinstance(cached, str) else str(cached)
+        except Exception:
+            pass
+
     msg = f"Erro: API lenta. Não foi possível consultar EAN após {MAX_RETRIES} tentativas."
     logger.error(msg)
     return msg
