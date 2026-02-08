@@ -74,7 +74,7 @@ def calculadora_tool(expressao: str) -> str:
 def _run_analista_agent_for_term(term: str, telefone: Optional[str] = None) -> dict:
     prompt = _load_analista_prompt()
     
-    llm = _get_fast_llm()
+    llm = _get_analista_llm()
     agent = create_react_agent(llm, [banco_vetorial_tool, estoque_preco_tool], prompt=prompt)
 
     user_payload = json.dumps(
@@ -194,6 +194,44 @@ def _get_fast_llm():
             http_async_client=_HTTP_ASYNC_CLIENT_CACHE,
             **client_kwargs
         )
+
+
+def _get_analista_llm():
+    model_name = (getattr(settings, "analista_llm_model", None) or getattr(settings, "llm_model", None) or "gemini-2.5-flash")
+    temp = getattr(settings, "analista_llm_temperature", None)
+    if temp is None:
+        temp = 0.0
+
+    if settings.llm_provider == "openai" and "gpt" in str(model_name):
+        if "x.ai" not in str(settings.openai_api_base):
+            model_name = model_name or "gpt-4o-mini"
+
+    if settings.llm_provider == "google":
+        return ChatGoogleGenerativeAI(
+            model=model_name,
+            google_api_key=settings.google_api_key,
+            temperature=float(temp),
+        )
+
+    client_kwargs = {}
+    if settings.openai_api_base:
+        client_kwargs["base_url"] = settings.openai_api_base
+
+    import httpx
+    global _HTTP_CLIENT_CACHE, _HTTP_ASYNC_CLIENT_CACHE
+    if _HTTP_CLIENT_CACHE is None:
+        _HTTP_CLIENT_CACHE = httpx.Client(timeout=30.0)
+    if _HTTP_ASYNC_CLIENT_CACHE is None:
+        _HTTP_ASYNC_CLIENT_CACHE = httpx.AsyncClient(timeout=30.0)
+
+    return ChatOpenAI(
+        model=model_name,
+        api_key=settings.openai_api_key,
+        temperature=float(temp),
+        http_client=_HTTP_CLIENT_CACHE,
+        http_async_client=_HTTP_ASYNC_CLIENT_CACHE,
+        **client_kwargs,
+    )
 
 # ============================================
 # 3. Função Principal (Tool)
