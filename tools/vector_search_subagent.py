@@ -39,10 +39,6 @@ def _get_fast_llm():
     model_name = getattr(settings, "llm_model", "gemini-2.5-flash")
     temp = float(getattr(settings, "llm_temperature", 0.0))
 
-    if settings.llm_provider == "openai" and model_name.startswith("gpt-4"):
-        if "x.ai" not in str(settings.openai_api_base):
-            model_name = "gpt-4o-mini"
-
     if settings.llm_provider == "google":
         return ChatGoogleGenerativeAI(
             model=model_name,

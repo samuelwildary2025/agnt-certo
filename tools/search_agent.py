@@ -128,15 +128,7 @@ def _get_fast_llm():
     # PREFERÊNCIA: Usar o modelo configurado no settings (ex: grok-beta)
     model_name = getattr(settings, "llm_model", "gemini-2.5-flash")
     temp = float(getattr(settings, "llm_temperature", 0.0))
-    
-    # Se quiser forçar um modelo mais leve para providers específicos:
-    if settings.llm_provider == "openai" and model_name.startswith("gpt-4"):
-         # Se for OpenAI oficial, podemos tentar o mini. Se for xAI (que usa client openai), mantemos o do settings.
-         if "x.ai" not in str(settings.openai_api_base):
-            model_name = "gpt-4o-mini" 
-         
-    # Se houver override no settings, respeitar (mas idealmente forçamos um modelo rápido aqui)
-    
+
     if settings.llm_provider == "google":
         return ChatGoogleGenerativeAI(
             model=model_name,

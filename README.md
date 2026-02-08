@@ -148,7 +148,7 @@ Preencha todas as variáveis no arquivo `.env`:
 ```env
 # OpenAI
 OPENAI_API_KEY=sk-proj-...
-LLM_MODEL=gpt-4o-mini
+LLM_MODEL=<SEU_MODELO_AQUI>
 LLM_TEMPERATURE=0
 
 # Supabase (Base de Conhecimento)
