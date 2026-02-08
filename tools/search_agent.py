@@ -197,16 +197,17 @@ def _get_fast_llm():
 
 
 def _get_analista_llm():
+    provider = (getattr(settings, "analista_llm_provider", None) or settings.llm_provider or "google").lower().strip()
     model_name = (getattr(settings, "analista_llm_model", None) or getattr(settings, "llm_model", None) or "gemini-2.5-flash")
     temp = getattr(settings, "analista_llm_temperature", None)
     if temp is None:
         temp = 0.0
 
-    if settings.llm_provider == "openai" and "gpt" in str(model_name):
+    if provider == "openai" and "gpt" in str(model_name):
         if "x.ai" not in str(settings.openai_api_base):
             model_name = model_name or "gpt-4o-mini"
 
-    if settings.llm_provider == "google":
+    if provider == "google":
         return ChatGoogleGenerativeAI(
             model=model_name,
             google_api_key=settings.google_api_key,

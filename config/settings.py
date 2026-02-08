@@ -25,6 +25,7 @@ class Settings(BaseSettings):
     llm_provider: str = "google"   # Mantido padrão mas pode ser sobrescrito pelo env
     analista_llm_model: Optional[str] = None
     analista_llm_temperature: Optional[float] = None
+    analista_llm_provider: Optional[str] = None
     gemini_audio_model: str = "gemini-1.5-flash" # Modelo padrão para áudio, configurável no env
     openai_api_base: Optional[str] = None # Para usar Grok (xAI) ou outros compatíveis
     moonshot_api_key: Optional[str] = None
