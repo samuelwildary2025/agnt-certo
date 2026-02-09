@@ -1,386 +1,130 @@
-"""Ferramenta de Sub-Agente para Busca Especializada de Produtos"""
 import json
-import logging
-from typing import List, Dict, Any, Optional
-from pathlib import Path
-from langchain_core.messages import HumanMessage
-from langchain_core.tools import tool
-from langgraph.prebuilt import create_react_agent
-from pydantic.v1 import BaseModel, Field
-from langchain_openai import ChatOpenAI
-from langchain_google_genai import ChatGoogleGenerativeAI
+import re
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from typing import Any, Dict, List, Optional
 
-from config.settings import settings
 from config.logger import setup_logger
 from tools.vector_search_subagent import run_vector_search_subagent
 from tools.http_tools import estoque_preco
+from tools.redis_tools import save_suggestions
+
 
 logger = setup_logger(__name__)
 
-_ANALISTA_PROMPT_CACHE: Optional[str] = None
+
+def _extract_eans_and_names(vector_output: str) -> List[Dict[str, str]]:
+    lines = [l.strip() for l in (vector_output or "").splitlines() if l.strip()]
+    results: List[Dict[str, str]] = []
+    for line in lines:
+        if ") " not in line:
+            continue
+        parts = line.split(" - ")
+        if len(parts) < 2:
+            continue
+        ean_part = parts[0].split(") ", 1)[-1].strip()
+        ean_match = re.search(r"\b(\d{2,})\b", ean_part)
+        ean = ean_match.group(1) if ean_match else None
+        if not ean:
+            ean_match = re.search(r"\bean\s*(\d{2,})\b", line, flags=re.IGNORECASE)
+            ean = ean_match.group(1) if ean_match else None
+        if not ean:
+            continue
+        name = " - ".join(parts[1:-1]).strip() if len(parts) > 2 else parts[1].strip()
+        results.append({"ean": ean, "nome": name})
+    return results
 
 
-
-def _load_analista_prompt() -> str:
-    global _ANALISTA_PROMPT_CACHE
-    if _ANALISTA_PROMPT_CACHE is not None:
-        return _ANALISTA_PROMPT_CACHE
-
-    base_dir = Path(__file__).resolve().parent.parent
-    prompt_path = base_dir / "prompts" / "analista.md"
-    _ANALISTA_PROMPT_CACHE = prompt_path.read_text(encoding="utf-8")
-    return _ANALISTA_PROMPT_CACHE
-
-
-
-
-
-@tool("banco_vetorial")
-def banco_vetorial_tool(query: str, limit: int = 10) -> str:
-    """
-    Realiza uma busca vetorial no banco de dados de produtos.
-    Retorna uma lista de produtos mais similares semanticamente à query.
-    """
-    return run_vector_search_subagent(query, limit=limit)
-
-
-@tool("estoque_preco")
-def estoque_preco_tool(ean: str) -> str:
-    """
-    Consulta o estoque e preço atual de um produto pelo seu código EAN.
-    Retorna JSON com dados atualizados.
-    """
-    return estoque_preco(ean)
-
-
-@tool("calculadora")
-def calculadora_tool(expressao: str) -> str:
-    """
-    Calculadora simples. Avalia expressões matemáticas básicas.
-    Use para calcular quantidade = valor / preco_kg.
-    Ex: calculadora("5 / 40") retorna "0.125"
-    """
+def _fetch_stock(ean: str) -> Optional[Dict[str, Any]]:
+    raw = estoque_preco(ean)
     try:
-        # Sanitizar expressão (apenas permitir números e operadores básicos)
-        allowed_chars = set("0123456789.+-*/() ")
-        if not all(c in allowed_chars for c in expressao):
-            return "Erro: Expressão inválida"
-        result = eval(expressao)
-        return str(round(result, 3))
-    except Exception as e:
-        return f"Erro: {e}"
-
-
-def _run_analista_agent_for_term(term: str, telefone: Optional[str] = None) -> dict:
-    prompt = _load_analista_prompt()
-    
-    llm = _get_analista_llm()
-    agent = create_react_agent(llm, [banco_vetorial_tool, estoque_preco_tool], prompt=prompt)
-
-    user_payload = json.dumps(
-        {"termo": term},
-        ensure_ascii=False,
-    )
-
-    config = {"recursion_limit": 15}
-    if telefone:
-        config["configurable"] = {"thread_id": telefone}
-
-    result = agent.invoke({"messages": [HumanMessage(content=user_payload)]}, config)
-    messages = result.get("messages", []) if isinstance(result, dict) else []
-
-    def _extract_price_from_estoque_preco_tool() -> Optional[float]:
-        for msg in reversed(messages):
-            if getattr(msg, "type", None) != "tool":
-                continue
-            tool_name = getattr(msg, "name", None) or getattr(msg, "tool", None)
-            if tool_name != "estoque_preco":
-                continue
-            content = msg.content if isinstance(msg.content, str) else str(msg.content)
-            content = (content or "").strip()
-            if not content:
-                continue
-            try:
-                parsed = json.loads(content)
-                if isinstance(parsed, list) and parsed:
-                    item = parsed[0] if isinstance(parsed[0], dict) else None
-                    if item:
-                        p = item.get("preco")
-                        try:
-                            return float(p)
-                        except Exception:
-                            return None
-            except Exception:
-                continue
+        data = json.loads(raw)
+    except Exception:
         return None
-
-    # DEBUG: Log all AI messages to diagnose issues
-    ai_messages = []
-    for m in messages:
-        if getattr(m, "type", None) == "ai":
-            content = m.content if isinstance(m.content, str) else str(m.content)
-            ai_messages.append(content[:200] if content else "(empty)")
-    
-    if ai_messages:
-        logger.debug(f"🧠 [ANALISTA] AI messages for '{term}': {ai_messages}")
-
-    for m in reversed(messages):
-        if getattr(m, "type", None) != "ai":
-            continue
-        content = m.content if isinstance(m.content, str) else str(m.content)
-        content = (content or "").strip()
-        if not content:
-            continue
-        
-        # Skip tool_calls-only messages (no actual content)
-        if hasattr(m, 'tool_calls') and m.tool_calls and not content:
-            continue
-            
-        try:
-            decision = json.loads(content)
-            if isinstance(decision, dict):
-                # Log successful parse with more detail
-                ok_val = decision.get('ok')
-                nome_val = decision.get('nome', 'N/A')
-                motivo_val = decision.get('motivo', '')
-                
-                if ok_val is True:
-                    logger.info(f"✅ [ANALISTA] OK for '{term}': nome={nome_val[:40]}, preco={decision.get('preco')}")
-                else:
-                    logger.warning(f"⚠️ [ANALISTA] FAILED for '{term}': motivo={motivo_val}")
-                
-                if ok_val is True:
-                    preco = decision.get("preco")
-                    try:
-                        preco_num = float(preco) if preco is not None else 0.0
-                    except Exception:
-                        preco_num = 0.0
-                    if preco_num <= 0.0 and not decision.get("opcoes"):
-                        preco_tool = _extract_price_from_estoque_preco_tool()
-                        if preco_tool and preco_tool > 0:
-                            decision["preco"] = preco_tool
-                            logger.info(f"💰 [ANALISTA] Price recovered from tool: R$ {preco_tool:.2f}")
-                return decision
-            # If parsed but not a dict, continue looking
-        except json.JSONDecodeError:
-            # Not JSON, continue to next message (FIX: was returning immediately before)
-            logger.debug(f"⚠️ [ANALISTA] Non-JSON response for '{term}': {content[:100]}...")
-            continue
-        except Exception as e:
-            logger.warning(f"⚠️ [ANALISTA] Error parsing response for '{term}': {e}")
-            continue
-
-    # If we got here, no valid JSON was found in any AI message
-    logger.warning(f"❌ [ANALISTA] No valid JSON response for '{term}'. Last content: {ai_messages[-1] if ai_messages else 'N/A'}")
-    return {"ok": False, "termo": term, "motivo": "Sem resposta JSON válida"}
+    if isinstance(data, list) and data:
+        item = data[0]
+        if isinstance(item, dict):
+            return item
+    return None
 
 
-# TERM_EXTRACTOR_PROMPT REMOVIDO - Simplificação do fluxo
-# O Vendedor envia os termos já separados e o Analista resolve
+def _build_options(term: str, limit: int = 15) -> List[Dict[str, Any]]:
+    vector_output = run_vector_search_subagent(term, limit=limit)
+    candidates = _extract_eans_and_names(vector_output)
+    if not candidates:
+        return []
 
-# ============================================
-# 2. Configurações do Modelo
-# ============================================
-
-_HTTP_CLIENT_CACHE = None
-_HTTP_ASYNC_CLIENT_CACHE = None
-
-def _get_fast_llm():
-    """Retorna um modelo rápido e barato para tarefas de sub-agente."""
-    global _HTTP_CLIENT_CACHE, _HTTP_ASYNC_CLIENT_CACHE
-
-    # PREFERÊNCIA: Usar o modelo configurado no settings (ex: grok-beta)
-    model_name = getattr(settings, "llm_model", "gemini-1.5-flash")
-    temp = 0.0 # Temperatura zero para precisão
-    
-    # Se quiser forçar um modelo mais leve para providers específicos:
-    if settings.llm_provider == "openai" and "gpt" in model_name:
-         # Se for OpenAI oficial, podemos tentar o mini. Se for xAI (que usa client openai), mantemos o do settings.
-         if "x.ai" not in str(settings.openai_api_base):
-            model_name = "gpt-4o-mini" 
-         
-    # Se houver override no settings, respeitar (mas idealmente forçamos um modelo rápido aqui)
-    
-    if settings.llm_provider == "google":
-        return ChatGoogleGenerativeAI(
-            model=model_name,
-            google_api_key=settings.google_api_key,
-            temperature=temp
-        )
-    else:
-        client_kwargs = {}
-        if settings.openai_api_base:
-            client_kwargs["base_url"] = settings.openai_api_base
-
-        import httpx
-        
-        # Singleton Clients para evitar abrir mil conexões no loop
-        if _HTTP_CLIENT_CACHE is None:
-            _HTTP_CLIENT_CACHE = httpx.Client(timeout=30.0)
-        if _HTTP_ASYNC_CLIENT_CACHE is None:
-            _HTTP_ASYNC_CLIENT_CACHE = httpx.AsyncClient(timeout=30.0)
-        
-        return ChatOpenAI(
-            model=model_name,
-            api_key=settings.openai_api_key,
-            temperature=temp,
-            http_client=_HTTP_CLIENT_CACHE,
-            http_async_client=_HTTP_ASYNC_CLIENT_CACHE,
-            **client_kwargs
-        )
+    results_by_ean: Dict[str, Dict[str, Any]] = {}
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        future_map = {executor.submit(_fetch_stock, c["ean"]): c for c in candidates[:limit]}
+        for future in as_completed(future_map):
+            candidate = future_map[future]
+            item = future.result()
+            if not item:
+                continue
+            nome = item.get("produto") or candidate.get("nome") or ""
+            preco = item.get("preco")
+            qtd = item.get("qtd_produto")
+            if preco is None:
+                continue
+            if qtd is not None and float(qtd) <= 0:
+                continue
+            categoria_parts = [
+                str(item.get("classificacao01") or "").strip(),
+                str(item.get("classificacao02") or "").strip(),
+                str(item.get("classificacao03") or "").strip(),
+            ]
+            categoria_parts = [p for p in categoria_parts if p]
+            categoria = " / ".join(categoria_parts) if categoria_parts else None
+            option: Dict[str, Any] = {
+                "nome": nome,
+                "preco": preco,
+                "qtd_produto": qtd,
+            }
+            if categoria:
+                option["categoria"] = categoria
+            results_by_ean[candidate.get("ean")] = option
+    options: List[Dict[str, Any]] = []
+    for candidate in candidates[:limit]:
+        ean = candidate.get("ean")
+        if ean in results_by_ean:
+            options.append(results_by_ean[ean])
+    return options
 
 
-def _get_analista_llm():
-    provider = (getattr(settings, "analista_llm_provider", None) or settings.llm_provider or "google").lower().strip()
-    model_name = (getattr(settings, "analista_llm_model", None) or getattr(settings, "llm_model", None) or "gemini-1.5-flash")
-    temp = getattr(settings, "analista_llm_temperature", None)
-    if temp is None:
-        temp = 0.0
+def search_specialist_tool(query: str) -> str:
+    term = (query or "").strip()
+    if not term:
+        return json.dumps({"ok": False, "motivo": "Termo vazio"}, ensure_ascii=False)
 
-    if provider == "openai" and "gpt" in str(model_name):
-        if "x.ai" not in str(settings.openai_api_base):
-            model_name = model_name or "gpt-4o-mini"
+    options = _build_options(term, limit=15)
+    if not options:
+        return json.dumps({"ok": False, "termo": term, "motivo": "Nenhum produto similar encontrado com preço ativo"}, ensure_ascii=False)
 
-    if provider == "google":
-        return ChatGoogleGenerativeAI(
-            model=model_name,
-            google_api_key=settings.google_api_key,
-            temperature=float(temp),
-        )
+    return json.dumps({"ok": True, "termo": term, "opcoes": options}, ensure_ascii=False)
 
-    client_kwargs = {}
-    if settings.openai_api_base:
-        client_kwargs["base_url"] = settings.openai_api_base
 
-    import httpx
-    global _HTTP_CLIENT_CACHE, _HTTP_ASYNC_CLIENT_CACHE
-    if _HTTP_CLIENT_CACHE is None:
-        _HTTP_CLIENT_CACHE = httpx.Client(timeout=30.0)
-    if _HTTP_ASYNC_CLIENT_CACHE is None:
-        _HTTP_ASYNC_CLIENT_CACHE = httpx.AsyncClient(timeout=30.0)
+def analista_produtos_tool(produtos: str, telefone: str = "") -> str:
+    raw = (produtos or "").strip()
+    if not raw:
+        return json.dumps({"ok": False, "motivo": "Nenhum produto informado"}, ensure_ascii=False)
 
-    return ChatOpenAI(
-        model=model_name,
-        api_key=settings.openai_api_key,
-        temperature=float(temp),
-        http_client=_HTTP_CLIENT_CACHE,
-        http_async_client=_HTTP_ASYNC_CLIENT_CACHE,
-        **client_kwargs,
-    )
+    terms = [t.strip() for t in raw.split(",") if t.strip()]
+    if len(terms) <= 1:
+        options = _build_options(raw, limit=15)
+        if options and telefone:
+            save_suggestions(telefone, [{"nome": o["nome"], "preco": o["preco"], "termo_busca": raw} for o in options])
+        if not options:
+            return json.dumps({"ok": False, "termo": raw, "motivo": "Nenhum produto similar encontrado com preço ativo"}, ensure_ascii=False)
+        return json.dumps({"ok": True, "termo": raw, "opcoes": options}, ensure_ascii=False)
 
-# ============================================
-# 3. Função Principal (Tool)
-# ============================================
+    items = []
+    with ThreadPoolExecutor(max_workers=min(8, len(terms))) as executor:
+        future_map = {executor.submit(_build_options, term, 15): term for term in terms}
+        for future in as_completed(future_map):
+            term = future_map[future]
+            options = future.result()
+            if options and telefone:
+                save_suggestions(telefone, [{"nome": o["nome"], "preco": o["preco"], "termo_busca": term} for o in options])
+            items.append({"termo": term, "opcoes": options})
 
-def analista_produtos_tool(queries_str: str, telefone: str = None) -> str:
-    """
-    [ANALISTA DE PRODUTOS]
-    Agente Especialista que traduz pedidos do cliente em produtos reais do banco de dados.
-    Usa busca vetorial + inteligência semântica.
-    
-    Args:
-        queries_str: Termos de busca (ex: "arroz, feijão, pão").
-        telefone: Opcional - número do cliente para salvar sugestões no cache.
-    """
-    results = []
-    validated_products = []  # Para cache no Redis
-    
-    # SIMPLIFICADO: Separação simples por vírgula ou newline (sem LLM intermediário)
-    # O Vendedor já envia termos limpos e o Analista resolve o significado
-    extracted_terms = [t.strip() for t in queries_str.replace("\n", ",").split(",") if t.strip()]
-
-    mode = "lote" if len(extracted_terms) > 1 else "individual"
-    logger.info(f"🕵️ [SUB-AGENT] Modo de busca: {mode} | termos: {extracted_terms}")
-    
-    # Função helper para processar cada termo em paralelo
-    def _process_single_term(term: str):
-        try:
-            decision = _run_analista_agent_for_term(term, telefone=telefone)
-            if not isinstance(decision, dict) or not decision.get("ok"):
-                motivo = (decision or {}).get("motivo") if isinstance(decision, dict) else None
-                return (f"❌ {term}: {motivo or 'Nao encontrado'}", None)
-
-            # MODO MULTIPLAS OPÇÕES
-            opcoes = decision.get("opcoes")
-            if opcoes and isinstance(opcoes, list) and len(opcoes) > 0:
-                out_lines = [f"📋 [ANALISTA] OPÇÕES PARA '{term}' (Pergunte ao cliente):"]
-                for i, opt in enumerate(opcoes, 1):
-                    n = opt.get("nome", "Item")
-                    p = float(opt.get("preco", 0.0))
-                    out_lines.append(f"   {i}. {n} - R$ {p:.2f}")
-                
-                out_lines.append("\n⚠️ NÃO Adicionado automaticamente. Liste as opções para o cliente.")
-                return ("\n".join(out_lines), None)
-
-            # MODO ÚNICO
-            nome = str(decision.get("nome") or "").strip()
-            preco = float(decision.get("preco") or 0.0)
-
-            if not nome:
-                return (f"❌ {term}: Resposta incompleta do analista", None)
-
-            validated_item = {"nome": nome, "preco": preco, "termo_busca": term}
-            razao = str(decision.get("razao") or "").strip()
-            
-            result_str = (
-                "🔍 [ANALISTA] ITEM VALIDADO:\n"
-                f"- Nome: {nome}\n"
-                f"- Preço Tabela: R$ {preco:.2f}\n"
-                f"- Obs: {razao}\n"
-                f"\n🔔 DICA: Item encontrado com sucesso.\n"
-                f"- Se o cliente pediu para COMPRAR/ADICIONAR: use add_item_tool.\n"
-                f"- Se o cliente apenas PERGUNTOU PREÇO/TEM: responda apenas com o preço."
-            )
-            return (result_str, validated_item)
-            
-        except Exception as e:
-            logger.error(f"❌ [SUB-AGENT] Erro no agente Analista para '{term}': {e}")
-            return (f"❌ {term}: Erro interno na busca.", None)
-
-    # Execução Paralela
-    import concurrent.futures
-    
-    # Limitar número de workers para não saturar
-    max_workers = min(10, len(extracted_terms) + 1)
-    
-    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-        # Submeter tarefas mantendo a ordem: mapa {future: index}
-        future_to_index = {
-            executor.submit(_process_single_term, term): i 
-            for i, term in enumerate(extracted_terms)
-        }
-        
-        # Array para guardar resultados na ordem correta
-        ordered_results = [None] * len(extracted_terms)
-        
-        for future in concurrent.futures.as_completed(future_to_index):
-            index = future_to_index[future]
-            try:
-                ordered_results[index] = future.result()
-            except Exception as e:
-                logger.error(f"Erro fatal processando future index {index}: {e}")
-                ordered_results[index] = (f"❌ Erro interno.", None)
-                
-    # Coletar resultados finais
-    for res in ordered_results:
-        if not res: 
-            continue
-        res_str, val_item = res
-        if res_str:
-            results.append(res_str)
-        if val_item:
-            validated_products.append(val_item)
-
-    # SALVAR CACHE NO REDIS SE TIVER TELEFONE
-    if telefone and validated_products:
-        try:
-            from tools.redis_tools import save_suggestions
-            save_suggestions(telefone, validated_products)
-            logger.info(f"💾 [SUB-AGENT] Cache salvo: {len(validated_products)} produtos para {telefone}")
-        except Exception as e:
-            logger.error(f"Erro ao salvar cache de sugestões: {e}")
-
-    if not results:
-        return "Nenhum produto encontrado."
-        
-    return "\n".join(results)
+    return json.dumps({"ok": True, "itens": items}, ensure_ascii=False)

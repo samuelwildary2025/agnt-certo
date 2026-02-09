@@ -472,6 +472,14 @@ def estoque_preco(ean: str) -> str:
                                 best_price = val
                 return best_price
 
+            def _extract_qty(d: Dict[str, Any]) -> Optional[float]:
+                for k in STOCK_QTY_KEYS:
+                    if k in d:
+                        val = _parse_float(d.get(k))
+                        if val is not None:
+                            return val
+                return None
+
             def _is_available(d: Dict[str, Any]) -> bool:
                 # 1. Verificar se está ativo (se a flag existir)
                 is_active = d.get("ativo", True)
