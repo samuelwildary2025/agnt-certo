@@ -3115,3 +3115,11 @@ During task with name 'orchestrator' and id 'c896b902-0241-ea22-5be7-e32ad66656d
 2026-02-08 21:57:49 - tools.http_tools - INFO - EAN 7896280600756: 0 item(s) disponíveis após filtragem
 2026-02-08 21:57:49 - tools.http_tools - INFO - EAN 7898225610196: 0 item(s) disponíveis após filtragem
 2026-02-08 21:57:49 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
+2026-02-08 22:50:37 - tools.db_vector_search - INFO - 🔍 [VECTOR SEARCH] Buscando: 'frango' (limit=5)
+2026-02-08 22:50:37 - tools.db_vector_search - INFO - 📚 [DICIONÁRIO] 'frango' → 'frango abatido'
+2026-02-08 22:50:37 - tools.db_vector_search - INFO - 🔍 [VECTOR SEARCH] mode=exact | query='frango' → 'frango abatido'
+2026-02-08 22:50:39 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
+2026-02-08 22:50:39 - tools.http_tools - INFO - Consultando estoque_preco por EAN: http://45.178.95.233:5001/api/Produto/GetProdutosEAN/550
+2026-02-08 22:50:39 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
+2026-02-08 22:50:39 - tools.http_tools - INFO - EAN 550: 1 item(s) disponíveis após filtragem
+2026-02-08 22:50:39 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.

@@ -2927,3 +2927,11 @@
 {"asctime": "2026-02-08 21:57:49", "name": "tools.http_tools", "levelname": "INFO", "message": "EAN 7896280600756: 0 item(s) dispon\u00edveis ap\u00f3s filtragem"}
 {"asctime": "2026-02-08 21:57:49", "name": "tools.http_tools", "levelname": "INFO", "message": "EAN 7898225610196: 0 item(s) dispon\u00edveis ap\u00f3s filtragem"}
 {"asctime": "2026-02-08 21:57:49", "name": "tools.redis_tools", "levelname": "ERROR", "message": "Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known."}
+{"asctime": "2026-02-08 22:50:37", "name": "tools.db_vector_search", "levelname": "INFO", "message": "\ud83d\udd0d [VECTOR SEARCH] Buscando: 'frango' (limit=5)"}
+{"asctime": "2026-02-08 22:50:37", "name": "tools.db_vector_search", "levelname": "INFO", "message": "\ud83d\udcda [DICION\u00c1RIO] 'frango' \u2192 'frango abatido'"}
+{"asctime": "2026-02-08 22:50:37", "name": "tools.db_vector_search", "levelname": "INFO", "message": "\ud83d\udd0d [VECTOR SEARCH] mode=exact | query='frango' \u2192 'frango abatido'"}
+{"asctime": "2026-02-08 22:50:39", "name": "tools.redis_tools", "levelname": "ERROR", "message": "Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known."}
+{"asctime": "2026-02-08 22:50:39", "name": "tools.http_tools", "levelname": "INFO", "message": "Consultando estoque_preco por EAN: http://45.178.95.233:5001/api/Produto/GetProdutosEAN/550"}
+{"asctime": "2026-02-08 22:50:39", "name": "tools.redis_tools", "levelname": "ERROR", "message": "Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known."}
+{"asctime": "2026-02-08 22:50:39", "name": "tools.http_tools", "levelname": "INFO", "message": "EAN 550: 1 item(s) dispon\u00edveis ap\u00f3s filtragem"}
+{"asctime": "2026-02-08 22:50:39", "name": "tools.redis_tools", "levelname": "ERROR", "message": "Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known."}
