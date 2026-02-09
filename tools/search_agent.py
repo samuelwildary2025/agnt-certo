@@ -47,7 +47,71 @@ def _fetch_stock(ean: str) -> Optional[Dict[str, Any]]:
     return None
 
 
+def _get_best_match(term: str, max_attempts: int = 5) -> Optional[Dict[str, Any]]:
+    """
+    Busca vetorial e retorna APENAS o melhor match com preço confirmado.
+    Tenta os top candidatos até encontrar um com preço/estoque válido.
+    
+    Fluxo:
+    1. Busca vetorial → lista de candidatos ordenados por similaridade
+    2. Para cada candidato (até max_attempts):
+       - Consulta preço/estoque
+       - Se disponível, retorna
+    3. Retorna None se nenhum estiver disponível
+    """
+    vector_output = run_vector_search(term, limit=max_attempts)
+    candidates = _extract_eans_and_names(vector_output)
+    
+    if not candidates:
+        return None
+    
+    for candidate in candidates[:max_attempts]:
+        ean = candidate.get("ean")
+        if not ean:
+            continue
+            
+        item = _fetch_stock(ean)
+        if not item:
+            continue
+            
+        preco = item.get("preco")
+        qtd = item.get("qtd_produto")
+        
+        if preco is None:
+            continue
+        
+        # FRIGORIFICO e HORTI-FRUTI: sempre disponíveis
+        categoria1 = str(item.get("classificacao01") or "").strip().upper()
+        is_always_available = categoria1 in ("FRIGORIFICO", "HORTI-FRUTI")
+        
+        if not is_always_available and qtd is not None and float(qtd) <= 0:
+            continue
+        
+        # Encontrou produto válido!
+        nome = item.get("produto") or candidate.get("nome") or ""
+        categoria_parts = [
+            str(item.get("classificacao01") or "").strip(),
+            str(item.get("classificacao02") or "").strip(),
+            str(item.get("classificacao03") or "").strip(),
+        ]
+        categoria_parts = [p for p in categoria_parts if p]
+        categoria = " / ".join(categoria_parts) if categoria_parts else None
+        
+        result = {
+            "nome": nome,
+            "preco": preco,
+            "qtd_produto": qtd,
+        }
+        if categoria:
+            result["categoria"] = categoria
+        
+        return result
+    
+    return None
+
+
 def _build_options(term: str, limit: int = 15) -> List[Dict[str, Any]]:
+    """Busca múltiplas opções (usado quando cliente quer ver alternativas)."""
     vector_output = run_vector_search(term, limit=limit)
     candidates = _extract_eans_and_names(vector_output)
     if not candidates:
@@ -114,83 +178,91 @@ def _format_options_list(options: List[Dict[str, Any]], termo: str, limit: int =
 
 
 def analista_produtos_tool(produtos: str, telefone: str = "") -> str:
+    """
+    Analista de Produtos: busca melhor match e retorna com preço confirmado.
+    
+    Para cada termo:
+    1. Busca vetorial → melhor candidato
+    2. Consulta preço/estoque
+    3. Retorna produto validado
+    """
     raw = (produtos or "").strip()
     if not raw:
         return json.dumps({"ok": False, "motivo": "Nenhum produto informado"}, ensure_ascii=False)
 
     terms = [t.strip() for t in raw.split(",") if t.strip()]
     
-    # Busca única ou múltipla
+    # Busca única
     if len(terms) <= 1:
-        options = _build_options(raw, limit=15)
+        produto = _get_best_match(raw)
         
-        if not options:
+        if not produto:
             return json.dumps({
                 "ok": False, 
                 "termo": raw, 
-                "motivo": "Nenhum produto similar encontrado com preço ativo"
+                "motivo": "Nenhum produto encontrado com estoque"
             }, ensure_ascii=False)
         
-        # Salvar sugestões para memória compartilhada
+        # Salvar para confirmação posterior
         if telefone:
-            save_suggestions(telefone, [{"nome": o["nome"], "preco": o["preco"], "termo_busca": raw} for o in options])
-        
-        # Organizar resposta: melhor opção + lista formatada
-        melhor = options[0]  # Primeiro resultado é o mais relevante
-        lista = _format_options_list(options, raw, limit=5)
+            save_suggestions(telefone, [{
+                "nome": produto["nome"], 
+                "preco": produto["preco"], 
+                "termo_busca": raw
+            }])
         
         return json.dumps({
             "ok": True, 
             "termo": raw, 
-            "melhor_opcao": {"nome": melhor["nome"], "preco": melhor["preco"]},
-            "lista_formatada": lista,
-            "opcoes": options[:5]  # Limitar a 5 para não sobrecarregar
+            "nome": produto["nome"],
+            "preco": produto["preco"]
         }, ensure_ascii=False)
 
-    # Múltiplos termos (busca em lote)
+    # Múltiplos termos - busca em paralelo
     items = []
     with ThreadPoolExecutor(max_workers=min(8, len(terms))) as executor:
-        future_map = {executor.submit(_build_options, term, 15): term for term in terms}
+        future_map = {executor.submit(_get_best_match, term): term for term in terms}
         for future in as_completed(future_map):
             term = future_map[future]
-            options = future.result()
+            produto = future.result()
             
-            if telefone and options:
-                save_suggestions(telefone, [{"nome": o["nome"], "preco": o["preco"], "termo_busca": term} for o in options])
-            
-            # Para cada termo, retornar a melhor opção + lista
-            if options:
-                melhor = options[0]
-                lista = _format_options_list(options, term, limit=3)
+            if produto:
+                if telefone:
+                    save_suggestions(telefone, [{
+                        "nome": produto["nome"], 
+                        "preco": produto["preco"], 
+                        "termo_busca": term
+                    }])
                 items.append({
-                    "termo": term, 
-                    "melhor_opcao": {"nome": melhor["nome"], "preco": melhor["preco"]},
-                    "lista_formatada": lista,
-                    "opcoes": options[:3]
+                    "termo": term,
+                    "nome": produto["nome"],
+                    "preco": produto["preco"]
                 })
             else:
                 items.append({
                     "termo": term, 
-                    "melhor_opcao": None,
-                    "lista_formatada": f"❌ Não encontrei '{term}'",
-                    "opcoes": []
+                    "nome": None,
+                    "preco": None,
+                    "motivo": "Não encontrado"
                 })
 
-    # Gerar resumo consolidado para múltiplos itens
-    linhas_resumo = ["📋 **Produtos encontrados:**"]
+    # Gerar lista formatada
+    linhas = ["📋 **Produtos encontrados:**"]
+    subtotal = 0.0
     for item in items:
-        if item.get("melhor_opcao"):
-            nome = item["melhor_opcao"]["nome"]
-            preco = item["melhor_opcao"]["preco"]
-            linhas_resumo.append(f"• {nome} - {_format_price(preco)}")
+        if item.get("nome"):
+            preco = item["preco"]
+            subtotal += preco
+            linhas.append(f"• {item['nome']} - {_format_price(preco)}")
         else:
-            linhas_resumo.append(f"• ❌ {item['termo']} - não encontrado")
+            linhas.append(f"• ❌ {item['termo']} - não encontrado")
     
-    resumo = "\n".join(linhas_resumo)
+    lista = "\n".join(linhas)
 
     return json.dumps({
         "ok": True, 
-        "resumo_formatado": resumo,
+        "lista_formatada": lista,
         "itens": items
     }, ensure_ascii=False)
+
 
