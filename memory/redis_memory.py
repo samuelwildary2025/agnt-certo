@@ -53,6 +53,18 @@ class RedisChatMessageHistory(BaseChatMessageHistory):
         try:
             # Converter Message -> Dict -> JSON
             msg_dict = message_to_dict(message)
+            
+            # CRITICAL: Remove thinking blocks to avoid Claude/Anthropic signature issues
+            # When extended thinking is enabled, Claude returns thinking blocks with a
+            # 'signature' field. If this field is missing when sending history back to
+            # the API, it causes HTTP 400: "thinking.signature: Field required"
+            # Since we're using Grok as main model, we can safely strip these blocks.
+            if isinstance(msg_dict.get("data", {}).get("content"), list):
+                msg_dict["data"]["content"] = [
+                    block for block in msg_dict["data"]["content"]
+                    if not isinstance(block, dict) or block.get("type") != "thinking"
+                ]
+            
             msg_json = json.dumps(msg_dict)
             
             # Pipeline para atomicidade

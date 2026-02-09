@@ -94,16 +94,23 @@ def _build_options(term: str, limit: int = 15) -> List[Dict[str, Any]]:
     return options
 
 
-def search_specialist_tool(query: str) -> str:
-    term = (query or "").strip()
-    if not term:
-        return json.dumps({"ok": False, "motivo": "Termo vazio"}, ensure_ascii=False)
+def _format_price(value: float) -> str:
+    """Formata preço no padrão brasileiro."""
+    return f"R$ {value:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
-    options = _build_options(term, limit=15)
+
+def _format_options_list(options: List[Dict[str, Any]], termo: str, limit: int = 5) -> str:
+    """Gera uma lista formatada de produtos para o cliente."""
     if not options:
-        return json.dumps({"ok": False, "termo": term, "motivo": "Nenhum produto similar encontrado com preço ativo"}, ensure_ascii=False)
-
-    return json.dumps({"ok": True, "termo": term, "opcoes": options}, ensure_ascii=False)
+        return ""
+    
+    lines = [f"📋 **Encontrei para '{termo}':**"]
+    for opt in options[:limit]:
+        nome = opt.get("nome", "Produto")
+        preco = opt.get("preco", 0)
+        lines.append(f"• {nome} - {_format_price(preco)}")
+    
+    return "\n".join(lines)
 
 
 def analista_produtos_tool(produtos: str, telefone: str = "") -> str:
@@ -112,22 +119,78 @@ def analista_produtos_tool(produtos: str, telefone: str = "") -> str:
         return json.dumps({"ok": False, "motivo": "Nenhum produto informado"}, ensure_ascii=False)
 
     terms = [t.strip() for t in raw.split(",") if t.strip()]
+    
+    # Busca única ou múltipla
     if len(terms) <= 1:
         options = _build_options(raw, limit=15)
-        if options and telefone:
-            save_suggestions(telefone, [{"nome": o["nome"], "preco": o["preco"], "termo_busca": raw} for o in options])
+        
         if not options:
-            return json.dumps({"ok": False, "termo": raw, "motivo": "Nenhum produto similar encontrado com preço ativo"}, ensure_ascii=False)
-        return json.dumps({"ok": True, "termo": raw, "opcoes": options}, ensure_ascii=False)
+            return json.dumps({
+                "ok": False, 
+                "termo": raw, 
+                "motivo": "Nenhum produto similar encontrado com preço ativo"
+            }, ensure_ascii=False)
+        
+        # Salvar sugestões para memória compartilhada
+        if telefone:
+            save_suggestions(telefone, [{"nome": o["nome"], "preco": o["preco"], "termo_busca": raw} for o in options])
+        
+        # Organizar resposta: melhor opção + lista formatada
+        melhor = options[0]  # Primeiro resultado é o mais relevante
+        lista = _format_options_list(options, raw, limit=5)
+        
+        return json.dumps({
+            "ok": True, 
+            "termo": raw, 
+            "melhor_opcao": {"nome": melhor["nome"], "preco": melhor["preco"]},
+            "lista_formatada": lista,
+            "opcoes": options[:5]  # Limitar a 5 para não sobrecarregar
+        }, ensure_ascii=False)
 
+    # Múltiplos termos (busca em lote)
     items = []
     with ThreadPoolExecutor(max_workers=min(8, len(terms))) as executor:
         future_map = {executor.submit(_build_options, term, 15): term for term in terms}
         for future in as_completed(future_map):
             term = future_map[future]
             options = future.result()
-            if options and telefone:
+            
+            if telefone and options:
                 save_suggestions(telefone, [{"nome": o["nome"], "preco": o["preco"], "termo_busca": term} for o in options])
-            items.append({"termo": term, "opcoes": options})
+            
+            # Para cada termo, retornar a melhor opção + lista
+            if options:
+                melhor = options[0]
+                lista = _format_options_list(options, term, limit=3)
+                items.append({
+                    "termo": term, 
+                    "melhor_opcao": {"nome": melhor["nome"], "preco": melhor["preco"]},
+                    "lista_formatada": lista,
+                    "opcoes": options[:3]
+                })
+            else:
+                items.append({
+                    "termo": term, 
+                    "melhor_opcao": None,
+                    "lista_formatada": f"❌ Não encontrei '{term}'",
+                    "opcoes": []
+                })
 
-    return json.dumps({"ok": True, "itens": items}, ensure_ascii=False)
+    # Gerar resumo consolidado para múltiplos itens
+    linhas_resumo = ["📋 **Produtos encontrados:**"]
+    for item in items:
+        if item.get("melhor_opcao"):
+            nome = item["melhor_opcao"]["nome"]
+            preco = item["melhor_opcao"]["preco"]
+            linhas_resumo.append(f"• {nome} - {_format_price(preco)}")
+        else:
+            linhas_resumo.append(f"• ❌ {item['termo']} - não encontrado")
+    
+    resumo = "\n".join(linhas_resumo)
+
+    return json.dumps({
+        "ok": True, 
+        "resumo_formatado": resumo,
+        "itens": items
+    }, ensure_ascii=False)
+

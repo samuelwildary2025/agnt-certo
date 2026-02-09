@@ -232,22 +232,123 @@ def get_current_phone() -> str:
     """Obtém o telefone atual do contexto de execução."""
     return _current_phone.get()
 
+
+# ============================================
+# Ferramentas do Analista (Sub-Agente)
+# ============================================
+
+@tool("banco_vetorial")
+def banco_vetorial_tool(query: str, limit: int = 10) -> str:
+    """
+    Busca produtos no banco de dados vetorial do supermercado.
+    Retorna lista de produtos similares ao termo buscado com nome, preço e disponibilidade.
+    
+    Args:
+        query: Termo de busca (ex: "coca 2l", "arroz tio joao", "picadinho")
+        limit: Quantidade máxima de resultados (padrão 10)
+    """
+    from tools.search_agent import _build_options
+    import json
+    
+    options = _build_options(query, limit=limit)
+    
+    if not options:
+        return json.dumps({"produtos": [], "mensagem": f"Nenhum produto encontrado para '{query}'"}, ensure_ascii=False)
+    
+    # Formatar para o Analista entender facilmente
+    produtos = []
+    for opt in options:
+        produtos.append({
+            "nome": opt.get("nome", ""),
+            "preco": opt.get("preco", 0),
+            "disponivel": True,  # Se chegou aqui, tem estoque
+            "categoria": opt.get("categoria", "")
+        })
+    
+    return json.dumps({"produtos": produtos, "termo": query}, ensure_ascii=False)
+
+
 def _call_analista(produtos: str) -> str:
     """
     [VENDEDOR -> ANALISTA]
-    Ponte para o Analista de Produtos.
-    O Vendedor envia o texto cru do cliente (ex: "quatro carioquinha e uma coca"), e o Analista decide se faz busca em lote ou individual.
-    O Analista retorna os produtos validados com EAN.
+    Agente Analista de Produtos que busca, analisa e organiza produtos.
+    
+    Fluxo:
+    1. Recebe pedido do Vendedor (ex: "coca 2l, arroz")
+    2. Busca no banco vetorial
+    3. Analisa e escolhe o melhor match para cada item
+    4. Retorna lista organizada com preços para o Vendedor
     
     Args:
-        produtos: Termos de busca.
+        produtos: Termos de busca separados por vírgula
     """
     if not produtos or not produtos.strip():
         return "❌ Informe os produtos para o analista."
     
-    # Obter telefone do contexto para memória compartilhada
     telefone = get_current_phone()
-    return analista_produtos_tool(produtos, telefone=telefone)
+    
+    # Carregar prompt do Analista
+    try:
+        prompt = load_prompt("analista.md")
+    except Exception as e:
+        logger.error(f"❌ Erro ao carregar prompt analista.md: {e}")
+        # Fallback para busca direta sem LLM
+        return analista_produtos_tool(produtos, telefone=telefone)
+    
+    # Configurar LLM para o Analista (temperatura 0 para decisões precisas)
+    analista_model = getattr(settings, 'analista_llm_model', None) or getattr(settings, 'llm_model', 'gemini-2.0-flash-lite')
+    analista_temp = getattr(settings, 'analista_llm_temperature', None)
+    if analista_temp is None:
+        analista_temp = 0.0
+    
+    llm = _build_llm(temperature=analista_temp, model_override=analista_model)
+    
+    # Ferramentas do Analista
+    analista_tools = [banco_vetorial_tool, estoque_preco_alias]
+    
+    # Criar agente ReAct
+    agent = create_react_agent(llm, analista_tools, prompt=prompt)
+    
+    config = {
+        "configurable": {"thread_id": f"analista_{telefone}"},
+        "recursion_limit": 10  # Limite menor para evitar loops
+    }
+    
+    try:
+        # Invocar agente com o pedido
+        result = agent.invoke(
+            {"messages": [HumanMessage(content=produtos)]},
+            config
+        )
+        
+        response = _extract_response(result)
+        
+        # Salvar sugestões para memória compartilhada (para confirmação posterior)
+        if telefone and response:
+            try:
+                import json
+                # Tentar extrair produtos do JSON retornado
+                if "{" in response:
+                    json_match = re.search(r'\{.*\}', response, re.DOTALL)
+                    if json_match:
+                        data = json.loads(json_match.group())
+                        if data.get("ok") and data.get("nome"):
+                            from tools.redis_tools import save_suggestions
+                            save_suggestions(telefone, [{
+                                "nome": data["nome"],
+                                "preco": data.get("preco", 0),
+                                "termo_busca": produtos
+                            }])
+            except Exception:
+                pass  # Falha silenciosa na extração
+        
+        logger.info(f"🧠 [ANALISTA] Resposta: {response[:150]}...")
+        return response
+        
+    except Exception as e:
+        logger.error(f"❌ [ANALISTA] Erro: {e}")
+        # Fallback para busca direta
+        return analista_produtos_tool(produtos, telefone=telefone)
 
 
 @tool("busca_analista")
