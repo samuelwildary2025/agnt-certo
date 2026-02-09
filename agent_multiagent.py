@@ -271,13 +271,12 @@ def banco_vetorial_tool(query: str, limit: int = 10) -> str:
 def _call_analista(produtos: str) -> str:
     """
     [VENDEDOR -> ANALISTA]
-    Agente Analista de Produtos que busca, analisa e organiza produtos.
+    Analista de Produtos que busca e organiza produtos.
     
-    Fluxo:
+    Fluxo simplificado (sem LLM extra):
     1. Recebe pedido do Vendedor (ex: "coca 2l, arroz")
-    2. Busca no banco vetorial
-    3. Analisa e escolhe o melhor match para cada item
-    4. Retorna lista organizada com preços para o Vendedor
+    2. Busca no banco vetorial + verifica estoque
+    3. Organiza e retorna lista formatada com preços
     
     Args:
         produtos: Termos de busca separados por vírgula
@@ -287,68 +286,9 @@ def _call_analista(produtos: str) -> str:
     
     telefone = get_current_phone()
     
-    # Carregar prompt do Analista
-    try:
-        prompt = load_prompt("analista.md")
-    except Exception as e:
-        logger.error(f"❌ Erro ao carregar prompt analista.md: {e}")
-        # Fallback para busca direta sem LLM
-        return analista_produtos_tool(produtos, telefone=telefone)
-    
-    # Configurar LLM para o Analista (temperatura 0 para decisões precisas)
-    analista_model = getattr(settings, 'analista_llm_model', None) or getattr(settings, 'llm_model', 'gemini-2.0-flash-lite')
-    analista_temp = getattr(settings, 'analista_llm_temperature', None)
-    if analista_temp is None:
-        analista_temp = 0.0
-    
-    llm = _build_llm(temperature=analista_temp, model_override=analista_model)
-    
-    # Ferramentas do Analista
-    analista_tools = [banco_vetorial_tool, estoque_preco_alias]
-    
-    # Criar agente ReAct
-    agent = create_react_agent(llm, analista_tools, prompt=prompt)
-    
-    config = {
-        "configurable": {"thread_id": f"analista_{telefone}"},
-        "recursion_limit": 10  # Limite menor para evitar loops
-    }
-    
-    try:
-        # Invocar agente com o pedido
-        result = agent.invoke(
-            {"messages": [HumanMessage(content=produtos)]},
-            config
-        )
-        
-        response = _extract_response(result)
-        
-        # Salvar sugestões para memória compartilhada (para confirmação posterior)
-        if telefone and response:
-            try:
-                import json
-                # Tentar extrair produtos do JSON retornado
-                if "{" in response:
-                    json_match = re.search(r'\{.*\}', response, re.DOTALL)
-                    if json_match:
-                        data = json.loads(json_match.group())
-                        if data.get("ok") and data.get("nome"):
-                            from tools.redis_tools import save_suggestions
-                            save_suggestions(telefone, [{
-                                "nome": data["nome"],
-                                "preco": data.get("preco", 0),
-                                "termo_busca": produtos
-                            }])
-            except Exception:
-                pass  # Falha silenciosa na extração
-        
-        logger.info(f"🧠 [ANALISTA] Resposta: {response[:150]}...")
-        return response
-        
-    except Exception as e:
-        logger.error(f"❌ [ANALISTA] Erro: {e}")
-        # Fallback para busca direta
-        return analista_produtos_tool(produtos, telefone=telefone)
+    # Usar busca direta com formatação melhorada (sem LLM extra)
+    # O analista_produtos_tool já retorna JSON organizado com lista_formatada
+    return analista_produtos_tool(produtos, telefone=telefone)
 
 
 @tool("busca_analista")
