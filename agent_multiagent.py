@@ -516,6 +516,22 @@ def _build_fast_llm():
 # Nós do Grafo (Agentes)
 # ============================================
 
+
+# ============================================
+# Helpers
+# ============================================
+
+def _extract_response(result: Any) -> str:
+    """Extrai a resposta de texto de um resultado do LangGraph/LangChain."""
+    if isinstance(result, dict) and "messages" in result:
+        msgs = result["messages"]
+        if msgs:
+            last_msg = msgs[-1]
+            return last_msg.content if isinstance(last_msg, BaseMessage) else str(last_msg)
+    elif isinstance(result, BaseMessage):
+        return result.content
+    return str(result)
+
 # Orquestrador removido
 
 
