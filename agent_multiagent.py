@@ -68,14 +68,14 @@ class AgentState(TypedDict):
 # --- FERRAMENTAS DO VENDEDOR ---
 
 @tool
-def busca_produto_tool(query: str) -> str:
+def busca_produto_tool(telefone: str, query: str) -> str:
     """
     Busca produtos, preços e estoque no banco de dados do supermercado.
     Use sempre que precisar verificar se tem um item ou o preço dele.
     Ex: 'arroz', 'coca cola', 'picanha'
     """
     from tools.db_search import search_products_db
-    return search_products_db(query)
+    return search_products_db(query, telefone=telefone)
 
 @tool
 def add_item_tool(telefone: str, produto: str, quantidade: float = 1.0, observacao: str = "", preco: float = 0.0, unidades: int = 0) -> str:
