@@ -578,13 +578,30 @@ def _build_fast_llm():
 
 def _extract_response(result: Any) -> str:
     """Extrai a resposta de texto de um resultado do LangGraph/LangChain."""
+    def _content_to_str(content):
+        """Converte content (str ou list) para string."""
+        if isinstance(content, str):
+            return content
+        if isinstance(content, list):
+            # Novo formato LangChain v1.x: content é lista de blocos
+            parts = []
+            for block in content:
+                if isinstance(block, str):
+                    parts.append(block)
+                elif isinstance(block, dict) and "text" in block:
+                    parts.append(block["text"])
+            return "\n".join(parts)
+        return str(content) if content else ""
+
     if isinstance(result, dict) and "messages" in result:
         msgs = result["messages"]
         if msgs:
             last_msg = msgs[-1]
-            return last_msg.content if isinstance(last_msg, BaseMessage) else str(last_msg)
+            if isinstance(last_msg, BaseMessage):
+                return _content_to_str(last_msg.content)
+            return str(last_msg)
     elif isinstance(result, BaseMessage):
-        return result.content
+        return _content_to_str(result.content)
     return str(result)
 
 # Orquestrador removido
@@ -619,7 +636,7 @@ def vendedor_node(state: AgentState) -> dict:
                 for call in msg.tool_calls:
                     tools_called_local.add(call["name"])
 
-        response_lower_local = (agent_response or "").lower()
+        response_lower_local = (agent_response if isinstance(agent_response, str) else str(agent_response or "")).lower()
         hallucination_detected_local = False
         hallucination_reason_local = ""
 
