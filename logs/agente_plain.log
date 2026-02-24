@@ -3211,3 +3211,82 @@ During task with name 'orchestrator' and id 'c896b902-0241-ea22-5be7-e32ad66656d
 2026-02-24 18:40:21 - tools.db_search - INFO - ⬆️ Priorização Horti: 4 produto(s) KG movido(s) para o topo
 2026-02-24 18:40:21 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
 2026-02-24 18:40:21 - tools.redis_tools - WARNING - [fallback] Sugestões não persistidas (Redis indisponível) para 5511999999999
+2026-02-24 19:32:34 - tools.db_search - INFO - 🔌 Pool de conexões Postgres criado (min=1, max=5)
+2026-02-24 19:32:35 - tools.db_search - INFO - ⬆️ Priorização Horti: 3 produto(s) KG movido(s) para o topo
+2026-02-24 19:32:35 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
+2026-02-24 19:32:35 - tools.redis_tools - WARNING - [fallback] Sugestões não persistidas (Redis indisponível) para 5511999999999
+2026-02-24 19:32:35 - tools.db_search - INFO - ⬆️ Priorização: 'kg' movido para o topo da busca 'abacaxi kg'
+2026-02-24 19:32:35 - tools.db_search - INFO - ⬆️ Priorização Horti: 1 produto(s) KG movido(s) para o topo
+2026-02-24 19:32:35 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
+2026-02-24 19:32:35 - tools.redis_tools - WARNING - [fallback] Sugestões não persistidas (Redis indisponível) para 5511999999999
+2026-02-24 19:32:36 - tools.db_search - INFO - ⬆️ Priorização Horti: 2 produto(s) KG movido(s) para o topo
+2026-02-24 19:32:36 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
+2026-02-24 19:32:36 - tools.redis_tools - WARNING - [fallback] Sugestões não persistidas (Redis indisponível) para 5511999999999
+2026-02-24 19:32:36 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
+2026-02-24 19:32:36 - tools.redis_tools - WARNING - [fallback] Sugestões não persistidas (Redis indisponível) para 5511999999999
+2026-02-24 19:33:38 - tools.db_search - INFO - 🔌 Pool de conexões Postgres criado (min=1, max=5)
+2026-02-24 19:33:38 - tools.db_search - INFO - ⬆️ Priorização Horti: 3 produto(s) KG movido(s) para o topo
+2026-02-24 19:33:38 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
+2026-02-24 19:33:38 - tools.redis_tools - WARNING - [fallback] Sugestões não persistidas (Redis indisponível) para 5511999999999
+2026-02-24 19:33:42 - tools.db_search - INFO - 🔌 Pool de conexões Postgres criado (min=1, max=5)
+2026-02-24 19:33:42 - tools.db_search - INFO - ⬆️ Priorização Horti: 2 produto(s) KG movido(s) para o topo
+2026-02-24 19:33:42 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
+2026-02-24 19:33:42 - tools.redis_tools - WARNING - [fallback] Sugestões não persistidas (Redis indisponível) para 5511999999999
+2026-02-24 19:33:46 - tools.db_search - INFO - 🔌 Pool de conexões Postgres criado (min=1, max=5)
+2026-02-24 19:33:46 - tools.db_search - INFO - ⬆️ Priorização: 'kg' movido para o topo da busca 'abacaxi kg'
+2026-02-24 19:33:46 - tools.db_search - INFO - ⬆️ Priorização Horti: 1 produto(s) KG movido(s) para o topo
+2026-02-24 19:33:46 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
+2026-02-24 19:33:46 - tools.redis_tools - WARNING - [fallback] Sugestões não persistidas (Redis indisponível) para 5511999999999
+2026-02-24 19:35:41 - tools.db_search - INFO - 🔌 Pool de conexões Postgres criado (min=1, max=5)
+2026-02-24 19:35:41 - tools.db_search - INFO - ⬆️ Priorização Horti: 3 produto(s) KG movido(s) para o topo
+2026-02-24 19:35:41 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
+2026-02-24 19:35:41 - tools.redis_tools - WARNING - [fallback] Sugestões não persistidas (Redis indisponível) para 5511999999999
+2026-02-24 19:35:42 - tools.db_search - INFO - 🔌 Pool de conexões Postgres criado (min=1, max=5)
+2026-02-24 19:35:43 - tools.db_search - INFO - ⬆️ Priorização Horti: 1 produto(s) KG movido(s) para o topo
+2026-02-24 19:35:43 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
+2026-02-24 19:35:43 - tools.redis_tools - WARNING - [fallback] Sugestões não persistidas (Redis indisponível) para 5511999999999
+2026-02-24 19:35:57 - tools.db_search - INFO - 🔌 Pool de conexões Postgres criado (min=1, max=5)
+2026-02-24 19:35:57 - tools.db_search - INFO - ⬆️ Priorização Horti: 2 produto(s) KG movido(s) para o topo
+2026-02-24 19:35:57 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
+2026-02-24 19:35:57 - tools.redis_tools - WARNING - [fallback] Sugestões não persistidas (Redis indisponível) para 5511999999999
+2026-02-24 19:35:58 - tools.db_search - INFO - 🔌 Pool de conexões Postgres criado (min=1, max=5)
+2026-02-24 19:35:59 - tools.db_search - INFO - ⬆️ Priorização: 'kg' movido para o topo da busca 'abacaxis kg'
+2026-02-24 19:35:59 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
+2026-02-24 19:35:59 - tools.redis_tools - WARNING - [fallback] Sugestões não persistidas (Redis indisponível) para 5511999999999
+2026-02-24 19:36:13 - tools.db_search - INFO - 🔌 Pool de conexões Postgres criado (min=1, max=5)
+2026-02-24 19:36:14 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
+2026-02-24 19:36:14 - tools.redis_tools - WARNING - [fallback] Sugestões não persistidas (Redis indisponível) para 5511999999999
+2026-02-24 19:40:29 - tools.db_search - INFO - 🔌 Pool de conexões Postgres criado (min=1, max=5)
+2026-02-24 19:40:29 - tools.db_search - INFO - ⬆️ Priorização Horti: 1 produto(s) KG movido(s) para o topo
+2026-02-24 19:40:29 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
+2026-02-24 19:40:29 - tools.redis_tools - WARNING - [fallback] Sugestões não persistidas (Redis indisponível) para 5511999999999
+2026-02-24 19:40:31 - tools.db_search - INFO - 🔌 Pool de conexões Postgres criado (min=1, max=5)
+2026-02-24 19:40:31 - tools.db_search - INFO - ⬆️ Priorização: 'kg' movido para o topo da busca 'abacaxis kg'
+2026-02-24 19:40:31 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
+2026-02-24 19:40:31 - tools.redis_tools - WARNING - [fallback] Sugestões não persistidas (Redis indisponível) para 5511999999999
+2026-02-24 19:40:41 - tools.db_search - INFO - 🔌 Pool de conexões Postgres criado (min=1, max=5)
+2026-02-24 19:40:41 - tools.db_search - INFO - ⬆️ Priorização: 'kg' movido para o topo da busca 'abacaxi kg'
+2026-02-24 19:40:41 - tools.db_search - INFO - ⬆️ Priorização Horti: 1 produto(s) KG movido(s) para o topo
+2026-02-24 19:40:41 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
+2026-02-24 19:40:41 - tools.redis_tools - WARNING - [fallback] Sugestões não persistidas (Redis indisponível) para 5511999999999
+2026-02-24 19:40:52 - tools.db_search - INFO - 🔌 Pool de conexões Postgres criado (min=1, max=5)
+2026-02-24 19:40:52 - tools.db_search - INFO - ⬆️ Priorização Horti: 2 produto(s) KG movido(s) para o topo
+2026-02-24 19:40:52 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
+2026-02-24 19:40:52 - tools.redis_tools - WARNING - [fallback] Sugestões não persistidas (Redis indisponível) para 5511999999999
+2026-02-24 19:40:52 - tools.db_search - INFO - ⬆️ Priorização Horti: 1 produto(s) KG movido(s) para o topo
+2026-02-24 19:40:52 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
+2026-02-24 19:40:52 - tools.redis_tools - WARNING - [fallback] Sugestões não persistidas (Redis indisponível) para 5511999999999
+2026-02-24 19:40:53 - tools.db_search - INFO - ⬆️ Priorização: 'kg' movido para o topo da busca 'abacaxis kg'
+2026-02-24 19:40:53 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
+2026-02-24 19:40:53 - tools.redis_tools - WARNING - [fallback] Sugestões não persistidas (Redis indisponível) para 5511999999999
+2026-02-24 19:41:35 - tools.db_search - INFO - 🔌 Pool de conexões Postgres criado (min=1, max=5)
+2026-02-24 19:41:36 - tools.db_search - INFO - ⬆️ Priorização Horti: 3 produto(s) KG movido(s) para o topo
+2026-02-24 19:41:36 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
+2026-02-24 19:41:36 - tools.redis_tools - WARNING - [fallback] Sugestões não persistidas (Redis indisponível) para 5511999999999
+2026-02-24 19:41:36 - tools.db_search - INFO - ⬆️ Priorização Horti: 3 produto(s) KG movido(s) para o topo
+2026-02-24 19:41:36 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
+2026-02-24 19:41:36 - tools.redis_tools - WARNING - [fallback] Sugestões não persistidas (Redis indisponível) para 5511999999999
+2026-02-24 19:41:37 - tools.db_search - INFO - ⬆️ Priorização: 'kg' movido para o topo da busca 'abacaxi kg'
+2026-02-24 19:41:37 - tools.db_search - INFO - ⬆️ Priorização Horti: 1 produto(s) KG movido(s) para o topo
+2026-02-24 19:41:37 - tools.redis_tools - ERROR - Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known.
+2026-02-24 19:41:37 - tools.redis_tools - WARNING - [fallback] Sugestões não persistidas (Redis indisponível) para 5511999999999

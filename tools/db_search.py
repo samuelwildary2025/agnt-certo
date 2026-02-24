@@ -205,29 +205,54 @@ def _apply_term_translations(query: str) -> str:
     replaced = [translations.get(w, w) for w in final_tokens if w]
     out = " ".join(replaced).strip()
     
-    # FASE 3: Regra geral para Frutas -> adicionar "kg"
-    # Se o cliente busca por uma fruta simples (ex: "maca", "banana", "uva")
-    # quer levar a versão fruta in natura (vendida por kg) e não produtos industrializados
-    FRUTAS_CONHECIDAS = {
+    # FASE 3: Regra geral para Hortifruti -> adicionar "kg"
+    # Se o cliente busca por uma fruta ou legume simples (ex: "maca", "banana", "cenoura")
+    # quer levar a versão in natura (vendida por kg) e não produtos industrializados
+    HORTI_CONHECIDOS = {
+        # Frutas
         "abacate", "abacaxi", "acerola", "ameixa", "amora", "banana", "caju",
         "carambola", "cereja", "coco", "cupuacu", "figo", "framboesa", "goiaba",
         "graviola", "jabuticaba", "jaca", "jamelao", "kiwi", "laranja", "limao",
         "maca", "mamao", "manga", "maracuja", "melancia", "melao", "morango",
-        "nectarina", "pera", "pessego", "pitanga", "pitaya", "roma", "tangerina", "uva"
+        "nectarina", "pera", "pessego", "pitanga", "pitaya", "roma", "tangerina", "uva",
+        # Legumes e Verduras
+        "abobora", "abobrinha", "acelga", "agriao", "aipo", "alface", "alho",
+        "alho-poro", "almeirao", "aspargo", "batata", "batata-doce", "berinjela",
+        "beterraba", "brocolis", "cebola", "cebolinha", "cenoura", "chicoria",
+        "chuchu", "coentro", "couve", "couve-flor", "espinafre", "inhame", "jilo",
+        "mandioca", "mandioquinha", "maxixe", "milho", "nabo", "palmito", "pepino",
+        "pimentao", "quibebe", "quiabo", "rabanete", "repolho", "rucula", "salsa", "tomate", "vagem"
     }
     
     # Ignorar a regra de adicionar "kg" se a busca contiver palavras que remetem a processados
     PROCESSADOS_KEYWORDS = {"suco", "doce", "polpa", "bala", "biscoito", "bolacha", "bolo", "sorvete", "picolé", "picole", "gelatina", "iogurte", "geleia", "barrinha", "creme", "oleo", "chips"}
     
-    # Normalizamos a saída sem acentos para facilitar a verificação
+    # Primeiro normalizamos a saída sem acentos
     out_no_accents = _strip_accents(out.lower())
     
+    # Converter a string 'out' inteira removendo "s" de palavras longas antes da inserção do kg 
+    # para que plural não quebre a pesquisa por prefixos
+    words = out.split()
+    corrected_words = []
+    
+    for w in words:
+        w_clean = _strip_accents(w.lower())
+        if len(w_clean) > 3 and w_clean.endswith("s"):
+            # Remover 's' final do plural na query (mantendo os acentos originais se existirem)
+            corrected_words.append(w[:-1])
+            out_no_accents = out_no_accents.replace(w_clean, w_clean[:-1])
+        else:
+            corrected_words.append(w)
+            
+    out = " ".join(corrected_words).strip()
+    words_singular = out_no_accents.split()
+            
     # Se já tem "kg" na string normalizada, obviamente não precisa colocar de novo
-    if "kg" not in out_no_accents:
+    if "kg" not in words_singular:
         # Verificar se não há nenhuma palavra de processado
-        if not any(k in out_no_accents for k in PROCESSADOS_KEYWORDS):
-            # Se encontrar ao menos UMA fruta conhecida na string
-            if any(f in out_no_accents for f in FRUTAS_CONHECIDAS):
+        if not any(k in words_singular for k in PROCESSADOS_KEYWORDS):
+            # Se encontrar ao menos UM hortifruti conhecido na string
+            if any(f in words_singular for f in HORTI_CONHECIDOS):
                 out = out + " kg"
 
     return out or q
