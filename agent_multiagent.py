@@ -543,21 +543,10 @@ def _build_llm(temperature: float = 0.0, model_override: str = None):
     
     if provider == "google":
         logger.debug(f"🚀 Usando Google Gemini: {model}")
-        
-        # Correção para modelos novos (Gemini 2.5 e Gemini 3) que exigem thought_signature
-        # Caso a versão atual do langchain-google-genai não envie isso automaticamente.
-        kwargs = {}
-        if "gemini-3" in model or "gemini-2.5" in model:
-            logger.debug(f"⚙️ Injetando thought_signature=True para {model}")
-            # Algumas versões aceitam no thought_signature, outras no model_kwargs
-            # Vamos tentar passar das duas formas de maneira segura ou dependendo do pacote
-            kwargs["thought_signature"] = True
-            
         return ChatGoogleGenerativeAI(
             model=model,
             google_api_key=settings.google_api_key,
             temperature=temperature,
-            **kwargs
         )
     else:
         logger.debug(f"🚀 Usando OpenAI (compatível): {model}")
