@@ -545,8 +545,10 @@ def _build_llm(temperature: float = 0.0, model_override: str = None):
         logger.debug(f"🚀 Usando Google Gemini: {model}")
         return ChatGoogleGenerativeAI(
             model=model,
-            google_api_key=settings.google_api_key,
+            api_key=settings.google_api_key,
             temperature=temperature,
+            timeout=120,  # Timeout de 2 minutos para evitar hang
+            max_retries=2,
         )
     else:
         logger.debug(f"🚀 Usando OpenAI (compatível): {model}")
@@ -621,6 +623,8 @@ def vendedor_node(state: AgentState) -> dict:
     
     # Criar agente ReAct com as ferramentas do vendedor
     agent = create_react_agent(llm, VENDEDOR_TOOLS, prompt=prompt)
+    
+    logger.info(f"👩‍💼 [VENDEDOR] Agente criado. Invocando...")
     
     # Configuração
     config = {
