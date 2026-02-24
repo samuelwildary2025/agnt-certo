@@ -1,17 +1,16 @@
-# Core Dependencies - Otimizadas para LangGraph
-# LangGraph usa langchain-core e langchain-openai, mas ainda precisamos de langchain-community para PostgreSQL
-langchain-core>=0.3.17,<0.4.0
-langchain-community>=0.3.7  # Necessário para PostgresChatMessageHistory
-langchain-openai==0.2.5
-langchain-google-genai>=2.0.0
-langgraph>=0.2.0  # Agente moderno em grafo
-openai==1.54.4
-langchain-anthropic==0.3.11
+# Core Dependencies - Upgraded for Gemini 3 support
+# Todos os pacotes LangChain precisam ser compatíveis entre si (ecossistema v1.x)
+langchain-google-genai>=4.0.0
+langchain-community>=0.4.0
+langchain-openai>=0.3.0
+langgraph>=0.3.0
+openai>=1.54.4
+langchain-anthropic>=0.4.0
 anthropic>=0.28.0
-google-genai>=0.3.0
+google-genai>=1.0.0
 
-# Fix compatibilidade: httpx 0.28 removeu 'proxies'; manter <0.28
-httpx<0.28,>=0.23.0
+# HTTP
+httpx>=0.23.0
 
 # Web Framework
 fastapi==0.115.4

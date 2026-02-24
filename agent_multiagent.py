@@ -542,23 +542,12 @@ def _build_llm(temperature: float = 0.0, model_override: str = None):
     provider = getattr(settings, "llm_provider", "google")
     
     if provider == "google":
-        # Modelos novos (Gemini 2.5/3) não funcionam com langchain-google-genai antigo
-        # (erro thought_signature). Usamos a API compatível com OpenAI do Google.
-        if "gemini-3" in model or "gemini-2.5" in model:
-            logger.info(f"🚀 Usando Gemini via API OpenAI-compatível: {model}")
-            return ChatOpenAI(
-                model=model,
-                api_key=settings.google_api_key,
-                base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
-                temperature=temperature,
-            )
-        else:
-            logger.debug(f"🚀 Usando Google Gemini (SDK nativo): {model}")
-            return ChatGoogleGenerativeAI(
-                model=model,
-                google_api_key=settings.google_api_key,
-                temperature=temperature,
-            )
+        logger.debug(f"🚀 Usando Google Gemini: {model}")
+        return ChatGoogleGenerativeAI(
+            model=model,
+            google_api_key=settings.google_api_key,
+            temperature=temperature,
+        )
     else:
         logger.debug(f"🚀 Usando OpenAI (compatível): {model}")
         
