@@ -2935,3 +2935,91 @@
 {"asctime": "2026-02-08 22:50:39", "name": "tools.redis_tools", "levelname": "ERROR", "message": "Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known."}
 {"asctime": "2026-02-08 22:50:39", "name": "tools.http_tools", "levelname": "INFO", "message": "EAN 550: 1 item(s) dispon\u00edveis ap\u00f3s filtragem"}
 {"asctime": "2026-02-08 22:50:39", "name": "tools.redis_tools", "levelname": "ERROR", "message": "Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known."}
+{"asctime": "2026-02-17 06:07:01", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-17 06:07:17", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-17 06:07:33", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-17 06:07:51", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:28:26", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:28:27", "name": "tools.redis_tools", "levelname": "ERROR", "message": "Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known."}
+{"asctime": "2026-02-24 18:28:27", "name": "tools.redis_tools", "levelname": "WARNING", "message": "[fallback] Sugest\u00f5es n\u00e3o persistidas (Redis indispon\u00edvel) para 5511999999999"}
+{"asctime": "2026-02-24 18:29:08", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:29:08", "name": "tools.redis_tools", "levelname": "ERROR", "message": "Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known."}
+{"asctime": "2026-02-24 18:29:08", "name": "tools.redis_tools", "levelname": "WARNING", "message": "[fallback] Sugest\u00f5es n\u00e3o persistidas (Redis indispon\u00edvel) para 5511999999999"}
+{"asctime": "2026-02-24 18:29:14", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:29:15", "name": "tools.redis_tools", "levelname": "ERROR", "message": "Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known."}
+{"asctime": "2026-02-24 18:29:15", "name": "tools.redis_tools", "levelname": "WARNING", "message": "[fallback] Sugest\u00f5es n\u00e3o persistidas (Redis indispon\u00edvel) para 5511999999999"}
+{"asctime": "2026-02-24 18:29:20", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:29:20", "name": "tools.redis_tools", "levelname": "ERROR", "message": "Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known."}
+{"asctime": "2026-02-24 18:29:20", "name": "tools.redis_tools", "levelname": "WARNING", "message": "[fallback] Sugest\u00f5es n\u00e3o persistidas (Redis indispon\u00edvel) para 5511999999999"}
+{"asctime": "2026-02-24 18:29:26", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:29:27", "name": "tools.db_search", "levelname": "INFO", "message": "\u2b06\ufe0f Prioriza\u00e7\u00e3o Horti: 3 produto(s) KG movido(s) para o topo"}
+{"asctime": "2026-02-24 18:29:27", "name": "tools.redis_tools", "levelname": "ERROR", "message": "Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known."}
+{"asctime": "2026-02-24 18:29:27", "name": "tools.redis_tools", "levelname": "WARNING", "message": "[fallback] Sugest\u00f5es n\u00e3o persistidas (Redis indispon\u00edvel) para 5511999999999"}
+{"asctime": "2026-02-24 18:29:32", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:29:33", "name": "tools.redis_tools", "levelname": "ERROR", "message": "Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known."}
+{"asctime": "2026-02-24 18:29:33", "name": "tools.redis_tools", "levelname": "WARNING", "message": "[fallback] Sugest\u00f5es n\u00e3o persistidas (Redis indispon\u00edvel) para 5511999999999"}
+{"asctime": "2026-02-24 18:29:48", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:29:48", "name": "tools.redis_tools", "levelname": "ERROR", "message": "Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known."}
+{"asctime": "2026-02-24 18:29:48", "name": "tools.redis_tools", "levelname": "WARNING", "message": "[fallback] Sugest\u00f5es n\u00e3o persistidas (Redis indispon\u00edvel) para 5511999999999"}
+{"asctime": "2026-02-24 18:29:55", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:29:55", "name": "tools.db_search", "levelname": "INFO", "message": "\u2b06\ufe0f Prioriza\u00e7\u00e3o Horti: 3 produto(s) KG movido(s) para o topo"}
+{"asctime": "2026-02-24 18:29:55", "name": "tools.redis_tools", "levelname": "ERROR", "message": "Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known."}
+{"asctime": "2026-02-24 18:29:55", "name": "tools.redis_tools", "levelname": "WARNING", "message": "[fallback] Sugest\u00f5es n\u00e3o persistidas (Redis indispon\u00edvel) para 5511999999999"}
+{"asctime": "2026-02-24 18:30:02", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:30:03", "name": "tools.redis_tools", "levelname": "ERROR", "message": "Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known."}
+{"asctime": "2026-02-24 18:30:03", "name": "tools.redis_tools", "levelname": "WARNING", "message": "[fallback] Sugest\u00f5es n\u00e3o persistidas (Redis indispon\u00edvel) para 5511999999999"}
+{"asctime": "2026-02-24 18:30:04", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:30:04", "name": "tools.redis_tools", "levelname": "ERROR", "message": "Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known."}
+{"asctime": "2026-02-24 18:30:04", "name": "tools.redis_tools", "levelname": "WARNING", "message": "[fallback] Sugest\u00f5es n\u00e3o persistidas (Redis indispon\u00edvel) para 5511999999999"}
+{"asctime": "2026-02-24 18:30:05", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:30:05", "name": "tools.db_search", "levelname": "INFO", "message": "\u2b06\ufe0f Prioriza\u00e7\u00e3o Horti: 1 produto(s) KG movido(s) para o topo"}
+{"asctime": "2026-02-24 18:30:05", "name": "tools.redis_tools", "levelname": "ERROR", "message": "Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known."}
+{"asctime": "2026-02-24 18:30:05", "name": "tools.redis_tools", "levelname": "WARNING", "message": "[fallback] Sugest\u00f5es n\u00e3o persistidas (Redis indispon\u00edvel) para 5511999999999"}
+{"asctime": "2026-02-24 18:30:14", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:30:14", "name": "tools.redis_tools", "levelname": "ERROR", "message": "Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known."}
+{"asctime": "2026-02-24 18:30:14", "name": "tools.redis_tools", "levelname": "WARNING", "message": "[fallback] Sugest\u00f5es n\u00e3o persistidas (Redis indispon\u00edvel) para 5511999999999"}
+{"asctime": "2026-02-24 18:30:22", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:30:28", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:30:35", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:30:40", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:30:48", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:31:00", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:31:10", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:31:26", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:31:55", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:32:06", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:32:17", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:32:30", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:32:41", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:32:58", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:33:10", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:33:21", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:33:35", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:33:49", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:34:01", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:34:14", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:34:26", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:34:37", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:34:43", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:34:57", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:37:11", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:37:21", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:37:23", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:38:07", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:38:29", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:39:52", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:39:53", "name": "tools.db_search", "levelname": "INFO", "message": "\u2b06\ufe0f Prioriza\u00e7\u00e3o Horti: 3 produto(s) KG movido(s) para o topo"}
+{"asctime": "2026-02-24 18:39:53", "name": "tools.redis_tools", "levelname": "ERROR", "message": "Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known."}
+{"asctime": "2026-02-24 18:39:53", "name": "tools.redis_tools", "levelname": "WARNING", "message": "[fallback] Sugest\u00f5es n\u00e3o persistidas (Redis indispon\u00edvel) para 5511999999999"}
+{"asctime": "2026-02-24 18:39:54", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:39:54", "name": "tools.db_search", "levelname": "INFO", "message": "\u2b06\ufe0f Prioriza\u00e7\u00e3o Horti: 4 produto(s) KG movido(s) para o topo"}
+{"asctime": "2026-02-24 18:39:54", "name": "tools.redis_tools", "levelname": "ERROR", "message": "Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known."}
+{"asctime": "2026-02-24 18:39:54", "name": "tools.redis_tools", "levelname": "WARNING", "message": "[fallback] Sugest\u00f5es n\u00e3o persistidas (Redis indispon\u00edvel) para 5511999999999"}
+{"asctime": "2026-02-24 18:39:56", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:39:56", "name": "tools.db_search", "levelname": "INFO", "message": "\u2b06\ufe0f Prioriza\u00e7\u00e3o Horti: 5 produto(s) KG movido(s) para o topo"}
+{"asctime": "2026-02-24 18:39:56", "name": "tools.redis_tools", "levelname": "ERROR", "message": "Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known."}
+{"asctime": "2026-02-24 18:39:56", "name": "tools.redis_tools", "levelname": "WARNING", "message": "[fallback] Sugest\u00f5es n\u00e3o persistidas (Redis indispon\u00edvel) para 5511999999999"}
+{"asctime": "2026-02-24 18:40:21", "name": "tools.db_search", "levelname": "INFO", "message": "\ud83d\udd0c Pool de conex\u00f5es Postgres criado (min=1, max=5)"}
+{"asctime": "2026-02-24 18:40:21", "name": "tools.db_search", "levelname": "INFO", "message": "\u2b06\ufe0f Prioriza\u00e7\u00e3o Horti: 4 produto(s) KG movido(s) para o topo"}
+{"asctime": "2026-02-24 18:40:21", "name": "tools.redis_tools", "levelname": "ERROR", "message": "Erro ao conectar ao Redis: Error 8 connecting to projeto_queiroz_redis_agente:6379. nodename nor servname provided, or not known."}
+{"asctime": "2026-02-24 18:40:21", "name": "tools.redis_tools", "levelname": "WARNING", "message": "[fallback] Sugest\u00f5es n\u00e3o persistidas (Redis indispon\u00edvel) para 5511999999999"}

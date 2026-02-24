@@ -204,6 +204,32 @@ def _apply_term_translations(query: str) -> str:
     final_tokens = joined.split(" ")
     replaced = [translations.get(w, w) for w in final_tokens if w]
     out = " ".join(replaced).strip()
+    
+    # FASE 3: Regra geral para Frutas -> adicionar "kg"
+    # Se o cliente busca por uma fruta simples (ex: "maca", "banana", "uva")
+    # quer levar a versão fruta in natura (vendida por kg) e não produtos industrializados
+    FRUTAS_CONHECIDAS = {
+        "abacate", "abacaxi", "acerola", "ameixa", "amora", "banana", "caju",
+        "carambola", "cereja", "coco", "cupuacu", "figo", "framboesa", "goiaba",
+        "graviola", "jabuticaba", "jaca", "jamelao", "kiwi", "laranja", "limao",
+        "maca", "mamao", "manga", "maracuja", "melancia", "melao", "morango",
+        "nectarina", "pera", "pessego", "pitanga", "pitaya", "roma", "tangerina", "uva"
+    }
+    
+    # Ignorar a regra de adicionar "kg" se a busca contiver palavras que remetem a processados
+    PROCESSADOS_KEYWORDS = {"suco", "doce", "polpa", "bala", "biscoito", "bolacha", "bolo", "sorvete", "picolé", "picole", "gelatina", "iogurte", "geleia", "barrinha", "creme", "oleo", "chips"}
+    
+    # Normalizamos a saída sem acentos para facilitar a verificação
+    out_no_accents = _strip_accents(out.lower())
+    
+    # Se já tem "kg" na string normalizada, obviamente não precisa colocar de novo
+    if "kg" not in out_no_accents:
+        # Verificar se não há nenhuma palavra de processado
+        if not any(k in out_no_accents for k in PROCESSADOS_KEYWORDS):
+            # Se encontrar ao menos UMA fruta conhecida na string
+            if any(f in out_no_accents for f in FRUTAS_CONHECIDAS):
+                out = out + " kg"
+
     return out or q
 
 
